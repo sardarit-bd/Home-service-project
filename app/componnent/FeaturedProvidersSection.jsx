@@ -111,7 +111,7 @@ export default function FeaturedProvidersSection() {
                                 </div>
 
                                 <Link
-                                    href={`/providers/${provider.id}`}
+                                    href={`/services/handyman/carpentry/${provider.id}`}
                                     className="inline-block mt-2 px-4 py-2 text-sm font-semibold rounded-md bg-[var(--brandBg)] text-white hover:opacity-90 transition"
                                 >
                                     View Profile

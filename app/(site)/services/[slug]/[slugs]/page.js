@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Electricals from "../../../../../public/Electricals.jpg";
 import handyman from "../../../../../public/handyman.jpeg";
 import outdoor from "../../../../../public/outdoor.jpg";
@@ -143,11 +143,12 @@ const providers = [
 
 export default function FeaturedProvidersSection() {
     const params = useParams()
-    console.log(params);
+    const query = useSearchParams();
+    const search = query.get('q');
     return (
         <section className="py-20 bg-white text-black relative">
             <div className="container mx-auto px-6 md:px-10 lg:px-16">
-
+                {search && (<h2 className="text-3xl mb-5">Search For: <span className="text-[var(--brandColor)]">{search}</span></h2>)}
 
                 {/* Providers Grid */}
                 <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">

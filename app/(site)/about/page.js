@@ -141,13 +141,13 @@ export default function AboutPage() {
 
                 <div className="flex flex-col md:flex-row justify-center items-center gap-5">
                     <Link
-                        href="/write-review"
+                        href="/services/handyman/carpentry"
                         className="px-8 py-3 bg-[var(--brandColor,#00a6f4)] text-white font-semibold rounded-full shadow hover:opacity-90 transition-all"
                     >
                         Write a Review
                     </Link>
                     <Link
-                        href="/join-as-provider"
+                        href="/signin"
                         className="px-8 py-3 border border-[var(--brandColor,#00a6f4)] text-[var(--brandColor,#00a6f4)] font-semibold rounded-full hover:bg-[var(--brandColor,#00a6f4)] hover:text-white transition-all"
                     >
                         Join as Provider

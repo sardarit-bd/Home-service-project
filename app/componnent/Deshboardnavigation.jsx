@@ -62,25 +62,25 @@ const DeshboardNavigation = ({ loginUser }) => {
 
 
 
-    /********** customer Nav items **********/
-    const customerNavItems = [
+    /********** provider Nav items **********/
+    const providerItems = [
         {
             name: "Deshboard",
             nested: false,
             sub: [],
-            link: "/deshboard/customer"
+            link: "/deshboard/provider"
         },
         {
-            name: "My Orders",
+            name: "Add Service",
             nested: false,
             sub: [],
-            link: "/deshboard/customer/orders"
+            link: "/deshboard/provider/addservice"
         },
         {
-            name: "Payment History",
+            name: "My Services",
             nested: false,
             sub: [],
-            link: "/deshboard/customer/payment"
+            link: "/deshboard/provider/myservices"
         },
         {
             name: "Profile",
@@ -112,7 +112,7 @@ const DeshboardNavigation = ({ loginUser }) => {
 
                     <div className="flex flex-col items-start lg:items-center gap-4 lg:gap-2 text-gray-500 mt-3 w-full">
                         {
-                            customerNavItems?.map((item, index) => {
+                            providerItems?.map((item, index) => {
                                 return (
                                     <Link key={index} className={`font-semibold text-md text-nowrap py-3 px-2 rounded-md lg:px-4 lg:py-3 hover:bg-sky-100 w-full ${pathName === item?.link && "bg-sky-100"}`} href={item?.link}>{item?.name}</Link>
                                 )
