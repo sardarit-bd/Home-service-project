@@ -6,18 +6,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
-
-
     const router = useRouter();
 
-
-
     const handleSearch = (e) => {
-
         e.preventDefault();
+        const form = e.target;
 
+        console.log("Search query:", form[0].value);
+        // For simplicity, redirecting to a fixed service page
 
-        router.push(`/services/handyman/carpentry`);
+        router.push(`/services/handyman/carpentry?q=${form[0].value}`);
 
     };
 
@@ -74,16 +72,16 @@ export default function HeroSection() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6, duration: 0.7 }}
-                    className="flex flex-col md:flex-row items-center justify-center md:justify-start gap-4 mt-10"
+                    className="flex flex-col md:flex-row relative z-50 items-center justify-center md:justify-start gap-4 mt-10"
                 >
                     <Link
-                        href="/write-review"
+                        href="/services/handyman/carpentry"
                         className="px-8 py-3 bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all"
                     >
                         Write a Review
                     </Link>
                     <Link
-                        href="/join-as-provider"
+                        href="/signin"
                         className="px-8 py-3 border border-gray-400 text-gray-500 font-semibold rounded-full hover:bg-white/10 transition-all"
                     >
                         Join as a Service Provider

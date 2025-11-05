@@ -40,13 +40,13 @@ export default function JoinBannerSection() {
                     className="flex flex-col md:flex-row justify-center items-center gap-5"
                 >
                     <Link
-                        href="/join-as-user"
+                        href="/services/handyman/carpentry"
                         className="px-8 py-3 rounded-full font-semibold bg-white text-[var(--brandBg)] hover:bg-gray-100 transition"
                     >
                         Join as a User
                     </Link>
                     <Link
-                        href="/join-as-provider"
+                        href="/signin"
                         className="px-8 py-3 rounded-full font-semibold border-2 border-gray-400 text-gray-700 hover:bg-white hover:text-[var(--brandBg)] transition"
                     >
                         Join as a Service Provider
