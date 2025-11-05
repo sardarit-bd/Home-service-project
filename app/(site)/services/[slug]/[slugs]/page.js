@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import Electricals from "../../../../../public/Electricals.jpg";
 import handyman from "../../../../../public/handyman.jpeg";
 import outdoor from "../../../../../public/outdoor.jpg";
@@ -141,6 +142,8 @@ const providers = [
 ];
 
 export default function FeaturedProvidersSection() {
+    const params = useParams()
+    console.log(params);
     return (
         <section className="py-20 bg-white text-black relative">
             <div className="container mx-auto px-6 md:px-10 lg:px-16">
@@ -150,7 +153,7 @@ export default function FeaturedProvidersSection() {
                 <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">
                     {providers.map((provider, index) => (
                         <motion.div
-                            key={provider.id}
+                            key={index}
                             initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
