@@ -22,13 +22,6 @@ export default function HeroSection() {
     };
 
 
-
-
-
-
-
-
-
     return (
         <section className="relative h-[95vh] bg-whtie text-black overflow-hidden py-16 md:py-24">
 
@@ -63,7 +56,7 @@ export default function HeroSection() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.7 }}
-                    className="flex items-center justify-center md:justify-start bg-white/90 backdrop-blur-md rounded-full p-2 pl-4 w-full max-w-2xl mx-auto md:mx-0"
+                    className="flex relative z-50 items-center justify-center md:justify-start bg-white/90 backdrop-blur-md rounded-full p-2 pl-4 w-full max-w-2xl mx-auto md:mx-0"
                 >
                     <Search className="text-gray-600" size={22} />
                     <input
