@@ -219,7 +219,7 @@ export default function ServiceDetailsPage() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className=" self-start sticky top-[50px] border"
+                    className=" self-start sticky top-[100px] border"
                 >
                     <div className="rounded-[var(--radius-card)] overflow-hidden shadow-xl group relative">
                         <Image
