@@ -247,10 +247,14 @@ const Navigation = ({ isOpen, setisOpen }) => {
                                                             key={k}
                                                             href={`${subItem.link}/${subName
                                                                 .toLowerCase()
-                                                                .replace(/\s+/g, "-")}`}
+                                                                .replace(/[^a-z0-9\s]/g, "") // remove everything except letters, numbers, and spaces
+                                                                .trim()
+                                                                .replace(/\s+/g, "-")        // replace spaces with hyphens
+                                                                }`}
                                                             className="block px-4 py-2 text-md text-gray-700 hover:bg-sky-50"
                                                             onClick={() => setisOpen(false)}
                                                         >
+
                                                             {subName}
                                                         </Link>
                                                     ))}
