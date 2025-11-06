@@ -5,83 +5,82 @@ import { AlertTriangle, Edit3, Loader2, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function AddCategoryPage() {
+export default function AddAreaPage() {
   const token = getCookie();
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [areas, setAreas] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
-  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null); // for modal
 
   const [formData, setFormData] = useState({
-    categoryName: "",
+    areaName: "",
     description: "",
-    subcategories: [],
+    subareas: [],
   });
 
   const [subInput, setSubInput] = useState("");
 
-  // --- Fetch All Categories ---
-  const fetchCategories = async () => {
+  // --- Fetch All Areas ---
+  const fetchAreas = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/allcatagory`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/allarea`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       const data = await res.json();
-      if (data.success) setCategories(data.total || []);
+      if (data.success) setAreas(data.total || []);
     } catch (err) {
-      console.error("Failed to load categories:", err);
+      console.error("Failed to load areas:", err);
     }
   };
 
   useEffect(() => {
-    fetchCategories();
+    fetchAreas();
   }, []);
 
-  // --- Add/remove subcategories ---
-  const addSubcategory = () => {
+  // --- Add Subarea ---
+  const addSubarea = () => {
     const newSub = subInput.trim();
-    if (newSub && !formData.subcategories.includes(newSub)) {
+    if (newSub && !formData.subareas.includes(newSub)) {
       setFormData((p) => ({
         ...p,
-        subcategories: [...p.subcategories, newSub],
+        subareas: [...p.subareas, newSub],
       }));
       setSubInput("");
     }
   };
 
-  const removeSubcategory = (name) => {
+  const removeSubarea = (name) => {
     setFormData((p) => ({
       ...p,
-      subcategories: p.subcategories.filter((s) => s !== name),
+      subareas: p.subareas.filter((s) => s !== name),
     }));
   };
 
-  // --- Reset form ---
   const resetForm = () => {
-    setFormData({ categoryName: "", description: "", subcategories: [] });
+    setFormData({ areaName: "", description: "", subareas: [] });
     setEditMode(false);
     setEditId(null);
   };
 
-  // --- Handle form submission (Add / Update) ---
+  // --- Submit Add or Update ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     const payload = {
-      categoryName: formData.categoryName.trim(),
+      areaName: formData.areaName.trim(),
       description: formData.description.trim(),
-      subcategories: formData.subcategories,
+      subareas: formData.subareas,
     };
 
     try {
       const endpoint = editMode
-        ? `admin/updatecatagory/${editId}`
-        : "admin/addcatagory";
+        ? `admin/updatearea/${editId}`
+        : "admin/addarea";
       const method = editMode ? "PUT" : "POST";
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${endpoint}`;
 
@@ -96,11 +95,9 @@ export default function AddCategoryPage() {
 
       const data = await res.json();
       if (data.success) {
-        toast.success(
-          editMode ? "✅ Category updated successfully!" : "✅ Category added successfully!"
-        );
+        toast.success(editMode ? "✅ Area updated!" : "✅ Area added!");
         resetForm();
-        fetchCategories();
+        fetchAreas();
       } else toast.error("❌ Operation failed.");
     } catch (error) {
       toast.error("⚠️ Network or server error.");
@@ -109,20 +106,21 @@ export default function AddCategoryPage() {
     }
   };
 
-  // --- Handle edit ---
-  const handleEdit = (cat) => {
+  const handleEdit = (area) => {
     setEditMode(true);
-    setEditId(cat._id);
+    setEditId(area._id);
     setFormData({
-      categoryName: cat.categoryName,
-      description: cat.description,
-      subcategories: cat.subcategories || [],
+      areaName: area.areaName,
+      description: area.description,
+      subareas: area.subareas || [],
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // --- Handle delete confirmation ---
-  const confirmDelete = (cat) => setDeleteTarget(cat);
+  // --- Delete Confirmation Modal Flow ---
+  const confirmDelete = (area) => {
+    setDeleteTarget(area);
+  };
 
   const handleDeleteConfirmed = async () => {
     if (!deleteTarget) return;
@@ -130,7 +128,7 @@ export default function AddCategoryPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/deletecatagory/${id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/deletearea/${id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -138,9 +136,11 @@ export default function AddCategoryPage() {
       );
       const data = await res.json();
       if (data.success) {
-        toast.success("🗑️ Category deleted successfully!");
-        fetchCategories();
-      } else toast.error("❌ Failed to delete category.");
+        toast.success("🗑️ Area deleted successfully!");
+        fetchAreas();
+      } else {
+        toast.error("❌ Failed to delete area.");
+      }
     } catch {
       toast.error("⚠️ Network error.");
     } finally {
@@ -151,10 +151,10 @@ export default function AddCategoryPage() {
   return (
     <section className="">
       <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* LEFT SIDE - Add / Update Category */}
+        {/* LEFT SIDE - Add / Update Area Form */}
         <div className="bg-white shadow-lg rounded-2xl p-8 border-t-4 border-[var(--brandBg)]">
           <h2 className="text-2xl font-bold text-[var(--brandColor)] mb-6 flex justify-between items-center">
-            {editMode ? "Update Category" : "Add New Category"}
+            {editMode ? "Update Area" : "Add New Area"}
             {editMode && (
               <button
                 onClick={resetForm}
@@ -166,17 +166,15 @@ export default function AddCategoryPage() {
           </h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* Category Name */}
+            {/* Area Name */}
             <div>
-              <label className="block text-sm font-semibold mb-1">
-                Category Name
-              </label>
+              <label className="block text-sm font-semibold mb-1">Area Name</label>
               <input
                 type="text"
-                placeholder="e.g. Electronics"
-                value={formData.categoryName}
+                placeholder="e.g. Dhaka, New York"
+                value={formData.areaName}
                 onChange={(e) =>
-                  setFormData({ ...formData, categoryName: e.target.value })
+                  setFormData({ ...formData, areaName: e.target.value })
                 }
                 required
                 className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-[var(--brandColor)]"
@@ -185,11 +183,9 @@ export default function AddCategoryPage() {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-semibold mb-1">
-                Description
-              </label>
+              <label className="block text-sm font-semibold mb-1">Description</label>
               <textarea
-                placeholder="Short category description..."
+                placeholder="Short description about area..."
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
@@ -200,25 +196,23 @@ export default function AddCategoryPage() {
               />
             </div>
 
-            {/* Subcategories */}
+            {/* Subareas */}
             <div>
-              <label className="block text-sm font-semibold mb-1">
-                Subcategories
-              </label>
+              <label className="block text-sm font-semibold mb-1">Subareas</label>
               <div className="flex gap-2 mb-2">
                 <input
                   type="text"
-                  placeholder="Add subcategory"
+                  placeholder="Add subarea"
                   value={subInput}
                   onChange={(e) => setSubInput(e.target.value)}
                   onKeyDown={(e) =>
-                    e.key === "Enter" && (e.preventDefault(), addSubcategory())
+                    e.key === "Enter" && (e.preventDefault(), addSubarea())
                   }
                   className="flex-grow border rounded-md px-4 py-2"
                 />
                 <button
                   type="button"
-                  onClick={addSubcategory}
+                  onClick={addSubarea}
                   className="bg-[var(--brandBg)] text-white px-4 py-2 rounded-md hover:bg-sky-600 transition"
                 >
                   <Plus size={18} />
@@ -226,13 +220,13 @@ export default function AddCategoryPage() {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {formData.subcategories.map((sub, i) => (
+                {formData.subareas.map((sub, i) => (
                   <span
                     key={i}
                     className="bg-[var(--brandBg)] text-white px-3 py-1 rounded-full flex items-center gap-1"
                   >
                     {sub}
-                    <button type="button" onClick={() => removeSubcategory(sub)}>
+                    <button type="button" onClick={() => removeSubarea(sub)}>
                       <X size={14} />
                     </button>
                   </span>
@@ -240,7 +234,6 @@ export default function AddCategoryPage() {
               </div>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -251,43 +244,43 @@ export default function AddCategoryPage() {
                   <Loader2 className="animate-spin mr-2" /> Submitting...
                 </>
               ) : editMode ? (
-                "Update Category"
+                "Update Area"
               ) : (
-                "Add Category"
+                "Add Area"
               )}
             </button>
           </form>
         </div>
 
-        {/* RIGHT SIDE - Category List */}
+        {/* RIGHT SIDE - Area List */}
         <div className="bg-white shadow-lg rounded-2xl p-8 border-t-4 border-[var(--brandBg)]">
           <h2 className="text-2xl font-bold text-[var(--brandColor)] mb-6">
-            Existing Categories
+            Existing Areas
           </h2>
 
           <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
-            {categories.length === 0 ? (
-              <p className="text-gray-500 text-center">No categories found.</p>
+            {areas.length === 0 ? (
+              <p className="text-gray-500 text-center">No areas found.</p>
             ) : (
-              categories.map((cat) => (
+              areas.map((area) => (
                 <div
-                  key={cat._id}
+                  key={area._id}
                   className="border border-gray-200 rounded-xl p-4 hover:shadow transition"
                 >
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="font-bold text-gray-800 text-lg">
-                      {cat.categoryName}
+                      {area.areaName}
                     </h3>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handleEdit(cat)}
+                        onClick={() => handleEdit(area)}
                         className="text-blue-600 hover:text-blue-800"
                         title="Edit"
                       >
                         <Edit3 size={18} />
                       </button>
                       <button
-                        onClick={() => confirmDelete(cat)}
+                        onClick={() => confirmDelete(area)}
                         className="text-red-600 hover:text-red-800"
                         title="Delete"
                       >
@@ -297,11 +290,11 @@ export default function AddCategoryPage() {
                   </div>
 
                   <p className="text-sm text-gray-600 mb-2">
-                    {cat.description || "No description"}
+                    {area.description || "No description"}
                   </p>
 
                   <div className="flex flex-wrap gap-2">
-                    {cat.subcategories?.map((sub, j) => (
+                    {area.subareas?.map((sub, j) => (
                       <span
                         key={j}
                         className="bg-gray-100 border border-gray-200 text-sm text-gray-700 px-3 py-1 rounded-full"
@@ -321,16 +314,13 @@ export default function AddCategoryPage() {
       {deleteTarget && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 text-center">
-            <AlertTriangle
-              className="mx-auto text-[var(--brandBg)] mb-3"
-              size={42}
-            />
+            <AlertTriangle className="mx-auto text-[var(--brandBg)] mb-3" size={42} />
             <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              Delete “{deleteTarget.categoryName}”?
+              Delete “{deleteTarget.areaName}”?
             </h3>
             <p className="text-sm text-gray-600 mb-6">
-              This action cannot be undone. The category and all its subcategories will
-              be permanently deleted.
+              This action cannot be undone. The area and all its subareas will be
+              permanently deleted.
             </p>
             <div className="flex justify-center gap-4">
               <button

@@ -60,7 +60,7 @@ export default async function middleware(req) {
 
     // Role-based access
     if (decoded && role) {
-        if (role !== "Admin" && path.startsWith("/deshboard/admin")) return NextResponse.redirect(new URL("/signin", req.nextUrl));
+        if (role !== "admin" && path.startsWith("/deshboard/admin")) return NextResponse.redirect(new URL("/signin", req.nextUrl));
     }
 
     // If logged in but trying to visit signin page
