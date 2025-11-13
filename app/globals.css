@@ -10,7 +10,9 @@
   --foreground: #171717;
 }
 
-
+html {
+  scroll-behavior: smooth;
+}
 
 
 @layer utilities {
@@ -26,6 +28,11 @@
     /* IE and Edge */
     scrollbar-width: none;
     /* Firefox */
+  }
+
+  .blurred-text {
+    filter: blur(4px);
+    /* Adjust the pixel value for desired blur intensity */
   }
 
 

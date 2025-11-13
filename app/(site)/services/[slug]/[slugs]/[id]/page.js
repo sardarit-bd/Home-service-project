@@ -1,12 +1,22 @@
 "use client";
 
+import DetailsPageSideImageWrper from "@/app/componnent/DetaillspageSideImageWrper";
+import ReviewPopUp from "@/app/componnent/ReviewPopUp";
+import getCookie from "@/utilis/helper/cookie/gettooken";
 import { motion } from "framer-motion";
 import { CheckCircle, Mail, MapPin, Phone, Star } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
-import bg from "../../../../../../public/home-service-bg.jpg";
+import { MdOutlineNotificationImportant } from "react-icons/md";
+
+
+
+
 
 export default function ServiceDetailsPage() {
+
+    const token = getCookie();
+
+
     const [reviews, setReviews] = useState([
         {
             id: 1,
@@ -34,11 +44,12 @@ export default function ServiceDetailsPage() {
 
     return (
         <section className="bg-gradient-to-b from-gray-50 to-white text-black py-12">
-            <div className="container mx-auto px-6 md:px-10 lg:px-16 grid md:grid-cols-3 gap-8 ">
+            <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8 ">
                 {/* LEFT: MAIN DETAILS */}
-                <div className="md:col-span-2 space-y-10 bg-white rounded-lg p-10 shadow-lg">
+                <div className="md:col-span-2 space-y-10 bg-white rounded-lg p-4 lg:p-10 shadow-lg">
                     {/* HEADER */}
                     <motion.div
+                        className="relative cursor-pointer group"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
@@ -46,7 +57,7 @@ export default function ServiceDetailsPage() {
                         <h1 className="text-4xl font-bold mb-3 text-[var(--brandColor)]">
                             FixRight Handyman
                         </h1>
-                        <div className="flex items-center gap-1 text-[var(--brandColor)] mb-3">
+                        <div className="flex items-center gap-1 text-yellow-500 mb-3">
                             {Array.from({ length: 5 }).map((_, i) => (
                                 <Star
                                     key={i}
@@ -60,6 +71,15 @@ export default function ServiceDetailsPage() {
                         <p className="text-gray-700 max-w-2xl leading-relaxed">
                             Reliable, experienced, and affordable handyman services across Chicago — handling everything from minor repairs to full home maintenance.
                         </p>
+
+
+                        <div className={`absolute top-20 left-0 w-[300px] h-auto rounded=md shadow-md z-50 bg-gray-50`}>
+
+                            <ReviewPopUp />
+
+                        </div>
+
+
                     </motion.div>
 
                     {/* CONTACT INFO */}
@@ -70,10 +90,18 @@ export default function ServiceDetailsPage() {
                         transition={{ duration: 0.6 }}
                         className="bg-white/90 backdrop-blur-sm border border-gray-100 p-6 rounded-[var(--radius-card)] shadow-md hover:shadow-lg transition"
                     >
-                        <h2 className="text-xl font-semibold mb-5 text-[var(--brandColor)] border-b pb-2 border-gray-200">
+                        <h2 className="text-xl font-semibold mb-5 text-[var(--brandColor)] border-b pb-2 border-gray-200 flex items-center gap-1">
                             Contact Information
+                            {
+                                !token && (
+                                    <span className="ml-2 p-1 rounded-lg border border-red-300 text-gray-900 text-xs bg-red-100 flex items-center gap-1">
+                                        <MdOutlineNotificationImportant className="text-lg" />
+                                        Please log in to view contact details
+                                    </span>
+                                )
+                            }
                         </h2>
-                        <div className="grid sm:grid-cols-2 gap-3 text-gray-700">
+                        <div className={`grid sm:grid-cols-2 gap-3 text-gray-700 ${!token && "blurred-text"}`}>
                             <p className="flex items-center gap-2">
                                 <Phone size={18} className="text-[var(--brandColor)]" />
                                 +1 (312) 555-1234
@@ -120,19 +148,29 @@ export default function ServiceDetailsPage() {
                     </motion.div>
 
                     {/* REVIEWS */}
-                    <motion.div
+                    <motion.div id="reviews"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="bg-white p-6 rounded-[var(--radius-card)] shadow-md hover:shadow-lg transition"
+                        className="bg-white p-6 rounded-[var(--radius-card)] shadow-md hover:shadow-lg transition scroll-mt-[100px]"
                     >
-                        <h2 className="text-xl font-semibold mb-5 text-[var(--brandColor)] border-b pb-2 border-gray-200">
+                        <h2 className="text-xl font-semibold mb-5 text-[var(--brandColor)] border-b pb-2 border-gray-200 flex items-center gap-1">
                             Customer Reviews
+
+                            {
+                                !token && (
+                                    <span className="ml-2 p-1 rounded-lg border border-red-300 text-gray-900 text-xs bg-red-100 flex items-center gap-1">
+                                        <MdOutlineNotificationImportant className="text-lg" />
+                                        Please log in to view Customer Reviews
+                                    </span>
+                                )
+                            }
+
                         </h2>
 
                         {/* Existing Reviews */}
-                        <div className="space-y-6 mb-10">
+                        <div className={`space-y-6 mb-10 relative ${!token && "blurred-text"}`}>
                             {reviews.map((r) => (
                                 <div
                                     key={r.id}
@@ -140,7 +178,7 @@ export default function ServiceDetailsPage() {
                                 >
                                     <div className="flex items-center justify-between mb-2">
                                         <h4 className="font-semibold text-gray-900">{r.name}</h4>
-                                        <div className="flex text-[var(--brandColor)]">
+                                        <div className="flex text-yellow-500">
                                             {Array.from({ length: 5 }).map((_, i) => (
                                                 <Star
                                                     key={i}
@@ -154,6 +192,7 @@ export default function ServiceDetailsPage() {
                                     <p className="text-gray-700 text-sm leading-relaxed">{r.text}</p>
                                 </div>
                             ))}
+
                         </div>
 
                         {/* Add Review */}
@@ -214,30 +253,9 @@ export default function ServiceDetailsPage() {
                 </div>
 
                 {/* RIGHT: STICKY IMAGE CARD */}
-                <motion.div
-                    initial={{ opacity: 0, x: 40 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className=" self-start sticky top-[100px] border"
-                >
-                    <div className="rounded-[var(--radius-card)] overflow-hidden shadow-xl group relative">
-                        <Image
-                            src={bg}
-                            alt="FixRight Handyman"
-                            width={600}
-                            height={600}
-                            className="object-cover w-full h-[450px] group-hover:scale-105 transition-transform duration-700"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-transparent"></div>
-                        <div className="absolute bottom-5 left-0 right-0 text-center text-white">
-                            <h3 className="text-xl font-semibold mb-1">
-                                FixRight Handyman
-                            </h3>
-                            <p className="text-sm text-gray-200">Chicago, IL</p>
-                        </div>
-                    </div>
-                </motion.div>
+                <DetailsPageSideImageWrper />
+
+
             </div>
         </section>
     );

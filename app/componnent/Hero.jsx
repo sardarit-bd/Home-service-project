@@ -101,7 +101,7 @@ export default function HeroSection() {
                 >
                     <button
                         onClick={() => setShowVideo(true)}
-                        className="w-[350px] h-[350px] md:w-[360px] md:h-[360px] rounded-full flex items-center justify-center bg-gradient-to-tr from-[var(--brandColor,#00a6f4)] to-sky-400 shadow-lg hover:scale-105 transition-transform animate-spin-smooth"
+                        className="w-[350px] h-[350px] md:w-[360px] md:h-[360px] rounded-full flex items-center justify-center bg-gradient-to-tr from-[var(--brandColor,#00a6f4)] to-sky-400 shadow-lg hover:scale-105 duration-500 cursor-pointer transition-transform animate-spin-smooth"
                     >
                         <Play size={200} className="text-white ml-1" />
                     </button>
@@ -141,7 +141,7 @@ export default function HeroSection() {
 
             {/* Decorative wave / bottom shape */}
             <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#00a6f4" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,229.3C480,213,600,139,720,106.7C840,75,960,85,1080,106.7C1200,128,1320,160,1380,176L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#00a6f4" fillOpacity="1" d="M0,160L60,181.3C120,203,240,245,360,229.3C480,213,600,139,720,106.7C840,75,960,85,1080,106.7C1200,128,1320,160,1380,176L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
             </div>
         </section >
     );
