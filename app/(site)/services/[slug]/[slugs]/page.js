@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import Electricals from "../../../../../public/Electricals.jpg";
 import handyman from "../../../../../public/handyman.jpeg";
 import outdoor from "../../../../../public/outdoor.jpg";
 import plumbing from "../../../../../public/plumbing.jpg";
+
 
 const providers = [
     {
@@ -144,11 +145,61 @@ const providers = [
 export default function FeaturedProvidersSection() {
     const params = useParams()
     const query = useSearchParams();
+    const pathName = usePathname();
     const search = query.get('q');
     return (
         <section className="py-20 bg-white text-black relative">
             <div className="container mx-auto px-6 md:px-10 lg:px-16">
-                {search && (<h2 className="text-3xl mb-5">Search For: <span className="text-[var(--brandColor)]">{search}</span></h2>)}
+
+
+                <div className="flex flex-col md:flex-row items-center justify-between w-full bg-sky-50 mb-10 px-1 md:px-5 py-3 rounded-2xl shadow-sm border border-sky-100">
+
+                    {/* Left Title */}
+                    <h2 className="text-xl md:text-3xl font-semibold text-gray-800 text-nowrap flex flex-col md:flex-row items-center gap-2">
+                        <span>
+                            Search For:
+                        </span>
+                        <span className="text-sm lg:text-2xl text-gray-600">
+                            {pathName.split("/")[pathName.split("/").length - 2].toLocaleUpperCase()} , {pathName.split("/")[pathName.split("/").length - 1].toLocaleUpperCase()}
+                        </span>
+
+                    </h2>
+
+                    {/* Right Dropdown */}
+                    <div className="flex mt-3 md:mt-0 items-center justify-end w-full">
+                        <select className="px-1 md:px-5 w-full md:w-fit py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 focus:ring-2 focus:ring-[var(--brandColor)] focus:outline-none cursor-pointer">
+
+                            <option>Aurora</option>
+                            <option>ANTIOCH</option>
+                            <option>ARLINGTON HEIGHTS</option>
+                            <option>ELK GROVE VILLAGE</option>
+                            <option>BARRINGTON</option>
+                            <option>CRYSTAL LAKE</option>
+                            <option>CARY</option>
+                            <option>DEERFIELD</option>
+                            <option>DES PLAINES</option>
+                            <option>FOX LAKE</option>
+                            <option>FOX RIVER GROVE</option>
+                            <option>GLENCOE</option>
+                            <option>GLENVIEW</option>
+                            <option>GRAYSLAKE</option>
+                            <option>GURNEE</option>
+                            <option>HARVARD</option>
+                            <option>HIGHLAND PARK</option>
+                            <option>LAKE BLUFF</option>
+                            <option>LAKE FOREST</option>
+                            <option>LAKE VILLA</option>
+                            <option>LAKE ZURICH</option>
+                            <option>LIBERTYVILLE</option>
+                            <option>MCHENRY</option>
+                            <option>MORTON GROVE</option>
+                            <option>MOUNT PROSPECT</option>
+                            <option>MUNDELEIN</option>
+
+                        </select>
+                    </div>
+                </div>
+
 
                 {/* Providers Grid */}
                 <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">

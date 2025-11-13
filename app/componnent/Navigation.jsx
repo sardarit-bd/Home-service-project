@@ -1,15 +1,11 @@
 "use client";
 
+import useLogedUserStore from "@/store/useLogedUser";
+import getCookie from "@/utilis/helper/cookie/gettooken";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { LuUser } from "react-icons/lu";
-import { MdDashboard, MdOutlineAccountCircle } from "react-icons/md";
-import { TbLogout2 } from "react-icons/tb";
-
-import useLogedUserStore from "@/store/useLogedUser";
-import getCookie from "@/utilis/helper/cookie/gettooken";
 
 const Navigation = ({ isOpen, setisOpen }) => {
   const pathname = usePathname();
@@ -216,9 +212,8 @@ const Navigation = ({ isOpen, setisOpen }) => {
 
   return (
     <nav
-      className={`${
-        isOpen ? "flex" : "hidden"
-      } lg:flex flex-col lg:flex-row lg:items-center absolute lg:static top-[75px] left-0 bg-white border lg:border-0 w-full lg:w-auto h-screen lg:h-auto z-50`}
+      className={`${isOpen ? "flex" : "hidden"
+        } lg:flex flex-col lg:flex-row lg:items-center absolute lg:static top-[75px] left-0 bg-white border lg:border-0 w-full lg:w-auto h-screen lg:h-auto z-50`}
     >
       {/* Navigation links */}
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-7 px-4 lg:px-0 py-6 lg:py-0 w-full text-gray-600">
@@ -231,9 +226,8 @@ const Navigation = ({ isOpen, setisOpen }) => {
               onMouseLeave={() => setHoveredMain(null)}
             >
               <button
-                className={`font-semibold text-md px-3 py-2 rounded-md hover:bg-sky-50 transition-all ${
-                  pathname === item.link ? "bg-sky-100 text-sky-600" : ""
-                }`}
+                className={`font-semibold text-md px-3 py-2 rounded-md hover:bg-sky-50 transition-all ${pathname === item.link ? "bg-sky-100 text-sky-600" : ""
+                  }`}
               >
                 {item.name}
               </button>
@@ -251,38 +245,25 @@ const Navigation = ({ isOpen, setisOpen }) => {
               key={i}
               href={item.link}
               onClick={() => setisOpen(false)}
-              className={`font-semibold text-md px-3 py-2 rounded-md hover:bg-sky-50 transition-all ${
-                pathname === item.link ? "bg-sky-100 text-sky-600" : ""
-              }`}
+              className={`font-semibold text-md px-3 py-2 rounded-md hover:bg-sky-50 transition-all ${pathname === item.link ? "bg-sky-100 text-sky-600" : ""
+                }`}
             >
               {item.name}
             </Link>
           )
         )}
       </div>
-
-      {/* Auth Section */}
-      {!token ? (
-        <div className="flex flex-row items-center justify-start px-6 md:justify-end gap-4">
-          <Link
-            href="/services/handyman/carpentry"
-            className="px-8 py-3 md:w-[200px] text-center bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all"
-          >
-            Join & Review
-          </Link>
-          <Link
-            href="/signin"
-            className="px-8 py-3 md:w-[200px] text-center border border-gray-400 text-gray-500 font-semibold rounded-full hover:bg-white/10 transition-all"
-          >
-            Service Provider
-          </Link>
-        </div>
-      ) : (
-        <UserMenu loginUser={loginUser} handleLogout={handleLogout} />
-      )}
     </nav>
   );
 };
+
+
+
+
+export default Navigation;
+
+
+
 
 // ✅ Separate component — safe hook usage
 const SubMenu = ({ subItem, setisOpen }) => {
@@ -313,9 +294,8 @@ const SubMenu = ({ subItem, setisOpen }) => {
       {open && subItem.sub?.length > 0 && (
         <div
           ref={ref}
-          className={`absolute left-full bg-white border border-gray-200 rounded-lg shadow-lg w-60 overflow-y-auto max-h-[80vh] ${
-            openUp ? "bottom-0" : "top-0"
-          }`}
+          className={`absolute left-full bg-white border border-gray-200 rounded-lg shadow-lg w-60 overflow-y-auto max-h-[80vh] ${openUp ? "bottom-0" : "top-0"
+            }`}
         >
           {subItem.sub.map((subName, k) => (
             <Link
@@ -337,64 +317,31 @@ const SubMenu = ({ subItem, setisOpen }) => {
   );
 };
 
-// ✅ User dropdown menu
-const UserMenu = ({ loginUser, handleLogout }) => (
-  <div className="flex items-center w-[200px] gap-2 h-full text-gray-500 relative cursor-pointer pr-6">
-    <div className="font-semibold text-md">{loginUser?.name}</div>
-    <div className="group">
-      <MdOutlineAccountCircle className="text-4xl" />
-      <div className="flex flex-col hidden absolute top-[30px] right-0 shadow-xl min-w-[220px] min-h-[120px] group-hover:block">
-        <div className="bg-transparent h-[15px]" />
-        <div className="p-4 bg-white border border-gray-200 rounded-lg tooltipscostom">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 mb-3">
-              <MdOutlineAccountCircle className="text-5xl" />
-              <div className="flex flex-col gap-0">
-                <div className="font-semibold text-sm">{loginUser?.name}</div>
-                <span className="text-xs bg-green-100 border border-green-200 rounded-md w-fit px-1">
-                  {loginUser?.role}
-                </span>
-              </div>
-            </div>
 
-            {loginUser?.role !== "user" && (
-              <>
-                <Link
-                  href={
-                    loginUser?.role === "admin"
-                      ? "/deshboard/admin"
-                      : loginUser?.role === "provider"
-                      ? "/deshboard/provider"
-                      : "/"
-                  }
-                  className="text-gray-600 text-md font-semibold hover:bg-gray-200 rounded-md p-2 flex items-center gap-2"
-                >
-                  <MdDashboard className="text-xl" />
-                  <span>Dashboard</span>
-                </Link>
 
-                <Link
-                  href="/deshboard/profile"
-                  className="text-gray-600 text-md font-semibold hover:bg-gray-200 rounded-md p-2 flex items-center gap-2"
-                >
-                  <LuUser className="text-xl" />
-                  <span>Profile</span>
-                </Link>
-              </>
-            )}
 
-            <button
-              onClick={handleLogout}
-              className="text-gray-600 text-md font-semibold hover:bg-gray-200 rounded-md p-2 flex items-center gap-2"
-            >
-              <TbLogout2 className="text-xl" />
-              <span>Logout</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
 
-export default Navigation;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
