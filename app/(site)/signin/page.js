@@ -17,16 +17,15 @@ const Signin = () => {
     const { isLoading, setLoading } = useLoadingStore();
     const { loginUser, setLoginUser } = useLogedUserStore();
     const [email, setEmail] = useState("");
-    const [role, setRole] = useState("user");
     const [password, setPassword] = useState("");
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (email && password && role) {
+        if (email && password) {
             setLoading(true);
-            const response = await logingandsignupmakepost("login", { email, password, role });
+            const response = await logingandsignupmakepost("login", { email, password });
 
             if (response) {
                 setCookie("token", response?.data?.token, 1);
@@ -87,13 +86,13 @@ const Signin = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none "
                     />
 
-                    <select onChange={(e) => { setRole(e.target.value) }} className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none">
+                    {/* <select onChange={(e) => { setRole(e.target.value) }} className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none">
                         <option value="">Select Role</option>
                         <option value="user">User</option>
                         <option value="admin">Admin</option>
                         <option value="provider">Service Provider</option>
 
-                    </select>
+                    </select> */}
 
 
                     <button
