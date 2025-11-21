@@ -88,9 +88,8 @@ const DeshboardNavigation = ({ loginUser }) => {
             return (
               <Link
                 key={index}
-                className={`font-semibold text-md text-nowrap py-3 px-2 rounded-md lg:px-4 lg:py-3 hover:bg-sky-100 w-full ${
-                  pathName === item?.link && "bg-sky-100"
-                }`}
+                className={`font-semibold text-md text-nowrap py-3 px-2 rounded-md lg:px-4 lg:py-3 hover:bg-sky-100 w-full ${pathName === item?.link && "bg-sky-100"
+                  }`}
                 href={item?.link}
               >
                 {item?.name}
@@ -104,9 +103,8 @@ const DeshboardNavigation = ({ loginUser }) => {
             return (
               <Link
                 key={index}
-                className={`font-semibold text-md text-nowrap py-3 px-2 rounded-md lg:px-4 lg:py-3 hover:bg-sky-100 w-full ${
-                  pathName === item?.link && "bg-sky-100"
-                }`}
+                className={`font-semibold text-md text-nowrap py-3 px-2 rounded-md lg:px-4 lg:py-3 hover:bg-sky-100 w-full ${pathName === item?.link && "bg-sky-100"
+                  }`}
                 href={item?.link}
               >
                 {item?.name}

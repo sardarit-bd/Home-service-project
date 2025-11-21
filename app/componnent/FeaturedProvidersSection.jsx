@@ -96,7 +96,7 @@ export default function FeaturedProvidersSection() {
                                 <p className="text-sm text-gray-600 mb-3">
                                     {provider.category}
                                 </p>
-                                <div className="flex items-center gap-1 text-[var(--brandColor)] mb-3">
+                                <div className="flex items-center gap-1 text-yellow-500 mb-3">
                                     {Array.from({ length: 5 }).map((_, i) => (
                                         <Star
                                             key={i}

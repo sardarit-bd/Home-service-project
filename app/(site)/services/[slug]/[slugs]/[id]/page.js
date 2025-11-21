@@ -5,7 +5,8 @@ import ReviewPopUp from "@/app/componnent/ReviewPopUp";
 import getCookie from "@/utilis/helper/cookie/gettooken";
 import { motion } from "framer-motion";
 import { CheckCircle, Mail, MapPin, Phone, Star } from "lucide-react";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { MdOutlineNotificationImportant } from "react-icons/md";
 
 
@@ -15,6 +16,9 @@ import { MdOutlineNotificationImportant } from "react-icons/md";
 export default function ServiceDetailsPage() {
 
     const token = getCookie();
+    const [Loading, setLoading] = useState(false);
+    const [Service, setService] = useState([]);
+    const { id } = useParams();
 
 
     const [reviews, setReviews] = useState([
@@ -42,6 +46,51 @@ export default function ServiceDetailsPage() {
         }
     };
 
+
+
+
+
+
+
+
+
+    //fetch the single service
+    // Fetch single service directly
+    const fetchService = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/singleProduct/${id}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            const data = await res.json();
+            if (data.success) setService(data.data);
+            else toast.error("❌ Failed to load service details.");
+        } catch {
+            toast.error("⚠️ Network or server error.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (id) fetchService();
+    }, [id]);
+
+
+    console.log(Service);
+
+
+
+
+
+    if (Loading) return <div>Loading...</div>
+
+
+
+
     return (
         <section className="bg-gradient-to-b from-gray-50 to-white text-black py-12">
             <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8 ">
@@ -55,7 +104,7 @@ export default function ServiceDetailsPage() {
                         transition={{ duration: 0.5 }}
                     >
                         <h1 className="text-4xl font-bold mb-3 text-[var(--brandColor)]">
-                            FixRight Handyman
+                            {Service?.name}
                         </h1>
                         <div className="flex items-center gap-1 text-yellow-500 mb-3">
                             {Array.from({ length: 5 }).map((_, i) => (
@@ -253,7 +302,7 @@ export default function ServiceDetailsPage() {
                 </div>
 
                 {/* RIGHT: STICKY IMAGE CARD */}
-                <DetailsPageSideImageWrper />
+                <DetailsPageSideImageWrper serviceImageUrls={Service?.serviceImageUrls} />
 
 
             </div>
