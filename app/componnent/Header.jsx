@@ -26,7 +26,7 @@ const Header = () => {
             {/* <Image src={logo} alt="Logo" className="w-[120px]" /> */}
             <h2 className="text-2xl font-bold text-[var(--brandColor)] flex items-center gap-1">
               <TbBrandGoogleHome className="text-5xl" />
-              <span className="hidden md:block text-md font-semibold pt-1">Services App</span>
+              <span className="hidden md:block text-md font-semibold pt-1">Services</span>
             </h2>
           </Link>
           <Navigation isOpen={isOpen} setisOpen={setisOpen} />

@@ -1,7 +1,7 @@
 import Category from "../componnent/Category";
 import FaqSection from "../componnent/FaqSection";
 import FeaturedProvidersSection from "../componnent/FeaturedProvidersSection";
-import HeroSection from "../componnent/Hero";
+import HeroBGWrper from "../componnent/HeroBg";
 import HowItWorksSection from "../componnent/HowItWorksSection";
 import JoinBannerSection from "../componnent/JoinBannerSection";
 import TestimonialsSection from "../componnent/TestimonialsSection";
@@ -15,10 +15,10 @@ const Homepage = () => {
 
   return (
     <main className="h-fit">
-      <HeroSection />
+      <HeroBGWrper />
+      <FeaturedProvidersSection />
       <Category />
       <HowItWorksSection />
-      <FeaturedProvidersSection />
       <WhyChooseUsSection />
       <TestimonialsSection />
       <JoinBannerSection />
