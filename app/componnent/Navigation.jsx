@@ -10,9 +10,13 @@ import { useEffect, useRef, useState } from "react";
 const Navigation = ({ isOpen, setisOpen }) => {
   const pathname = usePathname();
   const [hoveredMain, setHoveredMain] = useState(null);
+  const [Categories, setCategories] = useState([]);
   const { loginUser, setLoginUser } = useLogedUserStore();
   const token = getCookie();
 
+
+
+  //handle logout function is here
   const handleLogout = () => {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -20,6 +24,48 @@ const Navigation = ({ isOpen, setisOpen }) => {
     setLoginUser(null);
     window.location.href = "/";
   };
+
+
+
+
+
+
+
+  // --- Fetch All Categories ---
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/allcatagory`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await res.json();
+      if (data.success) setCategories(data.total || []);
+    } catch (err) {
+      console.error("Failed to load categories:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+
+
+
+  //make dynamic data stucture
+  const subesnav = [];
+  Categories.forEach((category) => {
+    subesnav.push({
+      name: category.categoryName,
+      nested: true,
+      link: `/services/${category.categoryName.toLowerCase()}`,
+      sub: category.subcategories,
+    });
+  })
+
+
 
   // ✅ All categories restored in full
   const navItems = [
@@ -29,183 +75,7 @@ const Navigation = ({ isOpen, setisOpen }) => {
       name: "Services",
       nested: true,
       link: "/services",
-      sub: [
-        {
-          name: "Handyman",
-          nested: true,
-          link: "/services/handyman",
-          sub: [
-            "Carpentry",
-            "Doors",
-            "Electrical",
-            "Plumbing",
-            "Appliances",
-            "Furniture Assembly",
-            "TV Mounting",
-            "Drywall",
-            "Windows",
-            "Landscaping",
-            "Air Conditioning System",
-            "Interior Painting",
-            "Exterior Painting",
-            "Siding",
-            "Moving Help",
-            "Other",
-          ],
-        },
-        {
-          name: "Landscaping",
-          nested: true,
-          link: "/services/landscaping",
-          sub: [
-            "Install or Design Landscaping",
-            "Lawn Care (Mowing, Clean-up, or Sod)",
-            "Trees and Shrubs (Trim, Removal)",
-            "Install Curbing or Edging",
-            "Patios / Walkways / Outdoor Living",
-            "Yard Drainage / Land Grading",
-            "Fence Installation / Repair",
-            "Other",
-          ],
-        },
-        {
-          name: "Plumbing",
-          nested: true,
-          link: "/services/plumbing",
-          sub: [
-            "Faucets / Fixtures / Drains / Pipes",
-            "Water Heater",
-            "Septic System / Sewer / Water Main",
-            "Other",
-          ],
-        },
-        {
-          name: "Electrical",
-          nested: true,
-          link: "/services/electrical",
-          sub: [
-            "Lights / Outlets / Switches",
-            "Electrical Wiring / Panel",
-            "Addition / Remodel Electrical",
-            "EV Charger Installation",
-            "Generator",
-            "Fan Installation",
-            "Smart Home System",
-            "Lightning Rod / Protection",
-            "Other",
-          ],
-        },
-        {
-          name: "Remodeling",
-          nested: true,
-          link: "/services/remodeling",
-          sub: [
-            "Bathroom Remodel",
-            "Kitchen Remodel",
-            "Building an Addition",
-            "Basement Remodel",
-            "Garage Remodel",
-            "Decks & Porches",
-            "Other Remodeling Projects",
-            "Other",
-          ],
-        },
-        {
-          name: "Roofing",
-          nested: true,
-          link: "/services/roofing",
-          sub: [
-            "Install / Repair Roof",
-            "Install / Replace Gutters",
-            "Siding",
-            "Clean Roof / Gutters",
-            "Chimney Work",
-            "Other",
-          ],
-        },
-        {
-          name: "Painting & Flooring",
-          nested: true,
-          link: "/services/painting-flooring",
-          sub: [
-            "Interior Painting",
-            "Exterior Painting",
-            "Specialty Finishes",
-            "Carpeting",
-            "Wood / Vinyl / Laminate / Tile Flooring",
-            "Other",
-          ],
-        },
-        {
-          name: "Cleaning",
-          nested: true,
-          link: "/services/cleaning",
-          sub: [
-            "General Cleaning / Housekeeping",
-            "Carpets / Rugs",
-            "Furniture / Upholstery",
-            "Windows",
-            "Professional Organizer",
-            "Duct / Ventilation Cleaning",
-            "Junk Removal / Disposal",
-            "Other",
-          ],
-        },
-        {
-          name: "HVAC",
-          nested: true,
-          link: "/services/hvac",
-          sub: [
-            "Air Conditioning",
-            "Heating (Furnace / Water Heater)",
-            "Thermostat & Accessories",
-            "Other HVAC Services",
-          ],
-        },
-        {
-          name: "Windows & Doors",
-          nested: true,
-          link: "/services/windows-doors",
-          sub: [
-            "Window Installation",
-            "Repair Windows",
-            "Door Installation",
-            "Window & Door Accessories",
-            "Other",
-          ],
-        },
-        {
-          name: "Concrete",
-          nested: true,
-          link: "/services/concrete",
-          sub: [
-            "Patio / Walkway / Steps",
-            "Driveway",
-            "Foundation",
-            "Floors",
-            "Walls",
-            "Swimming Pool",
-            "Other",
-          ],
-        },
-        {
-          name: "Other Home Services",
-          nested: true,
-          link: "/services/other",
-          sub: [
-            "Pest Control",
-            "Cabinet Work",
-            "Glass & Mirrors",
-            "Stone Work",
-            "Demolition",
-            "Decoration",
-            "Moving",
-            "Solar Panel Installation",
-            "Asbestos / Lead Removal",
-            "Other",
-          ],
-        },
-      ],
+      sub: subesnav,
     },
     { name: "Contact Us", link: "/contact", nested: false },
   ];

@@ -5,148 +5,78 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import Electricals from "../../../../../public/Electricals.jpg";
-import handyman from "../../../../../public/handyman.jpeg";
-import outdoor from "../../../../../public/outdoor.jpg";
-import plumbing from "../../../../../public/plumbing.jpg";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 
-const providers = [
-    {
-        id: 1,
-        name: "John’s Handyman Services",
-        category: "Handyman",
-        rating: 4.9,
-        reviews: 128,
-        image: handyman,
-    },
-    {
-        id: 2,
-        name: "GreenLeaf Landscaping",
-        category: "Landscaping",
-        rating: 4.8,
-        reviews: 97,
-        image: outdoor,
-    },
-    {
-        id: 3,
-        name: "AquaPro Plumbing",
-        category: "Plumbing",
-        rating: 5.0,
-        reviews: 156,
-        image: plumbing,
-    },
-    {
-        id: 4,
-        name: "SmartFix Electricals",
-        category: "Electrical",
-        rating: 4.7,
-        reviews: 88,
-        image: Electricals,
-    },
-    {
-        id: 1,
-        name: "John’s Handyman Services",
-        category: "Handyman",
-        rating: 4.9,
-        reviews: 128,
-        image: handyman,
-    },
-    {
-        id: 2,
-        name: "GreenLeaf Landscaping",
-        category: "Landscaping",
-        rating: 4.8,
-        reviews: 97,
-        image: outdoor,
-    },
-    {
-        id: 3,
-        name: "AquaPro Plumbing",
-        category: "Plumbing",
-        rating: 5.0,
-        reviews: 156,
-        image: plumbing,
-    },
-    {
-        id: 4,
-        name: "SmartFix Electricals",
-        category: "Electrical",
-        rating: 4.7,
-        reviews: 88,
-        image: Electricals,
-    },
-    {
-        id: 1,
-        name: "John’s Handyman Services",
-        category: "Handyman",
-        rating: 4.9,
-        reviews: 128,
-        image: handyman,
-    },
-    {
-        id: 2,
-        name: "GreenLeaf Landscaping",
-        category: "Landscaping",
-        rating: 4.8,
-        reviews: 97,
-        image: outdoor,
-    },
-    {
-        id: 3,
-        name: "AquaPro Plumbing",
-        category: "Plumbing",
-        rating: 5.0,
-        reviews: 156,
-        image: plumbing,
-    },
-    {
-        id: 4,
-        name: "SmartFix Electricals",
-        category: "Electrical",
-        rating: 4.7,
-        reviews: 88,
-        image: Electricals,
-    },
-    {
-        id: 1,
-        name: "John’s Handyman Services",
-        category: "Handyman",
-        rating: 4.9,
-        reviews: 128,
-        image: handyman,
-    },
-    {
-        id: 2,
-        name: "GreenLeaf Landscaping",
-        category: "Landscaping",
-        rating: 4.8,
-        reviews: 97,
-        image: outdoor,
-    },
-    {
-        id: 3,
-        name: "AquaPro Plumbing",
-        category: "Plumbing",
-        rating: 5.0,
-        reviews: 156,
-        image: plumbing,
-    },
-    {
-        id: 4,
-        name: "SmartFix Electricals",
-        category: "Electrical",
-        rating: 4.7,
-        reviews: 88,
-        image: Electricals,
-    },
-];
 
 export default function FeaturedProvidersSection() {
+
+
+
     const params = useParams()
     const query = useSearchParams();
     const pathName = usePathname();
     const search = query.get('q');
+    const [Areas, setAreas] = useState([]);
+    const [Services, setServices] = useState([]);
+    const [Loading, setLoading] = useState(false);
+
+
+
+
+    // --- Fetch All Areas ---
+    const fetchAreas = async () => {
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/allarea`,
+            );
+            const data = await res.json();
+            if (data.success) setAreas(data.total || []);
+        } catch (err) {
+            console.error("Failed to load areas:", err);
+        }
+    };
+
+
+
+    const fetchServices = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/allproducts`, {
+                method: "GET"
+            });
+            const data = await res.json();
+            if (data.success) setServices(data.data || []);
+            else toast.error("❌ Failed to fetch services.");
+        } catch {
+            toast.error("⚠️ Network or server error.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+    useEffect(() => {
+        fetchAreas();
+        fetchServices();
+    }, []);
+
+
+
+
+    console.log(Services);
+
+
+    console.log(Services[0]?.reviews?.analytics?.average);
+
+
+    if (Loading) return <div>Loading...</div>
+
+
+
+
     return (
         <section className="py-20 bg-white text-black relative">
             <div className="container mx-auto px-6 md:px-10 lg:px-16">
@@ -169,32 +99,13 @@ export default function FeaturedProvidersSection() {
                     <div className="flex mt-3 md:mt-0 items-center justify-end w-full">
                         <select className="px-1 md:px-5 w-full md:w-fit py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 focus:ring-2 focus:ring-[var(--brandColor)] focus:outline-none cursor-pointer">
 
-                            <option>Aurora</option>
-                            <option>ANTIOCH</option>
-                            <option>ARLINGTON HEIGHTS</option>
-                            <option>ELK GROVE VILLAGE</option>
-                            <option>BARRINGTON</option>
-                            <option>CRYSTAL LAKE</option>
-                            <option>CARY</option>
-                            <option>DEERFIELD</option>
-                            <option>DES PLAINES</option>
-                            <option>FOX LAKE</option>
-                            <option>FOX RIVER GROVE</option>
-                            <option>GLENCOE</option>
-                            <option>GLENVIEW</option>
-                            <option>GRAYSLAKE</option>
-                            <option>GURNEE</option>
-                            <option>HARVARD</option>
-                            <option>HIGHLAND PARK</option>
-                            <option>LAKE BLUFF</option>
-                            <option>LAKE FOREST</option>
-                            <option>LAKE VILLA</option>
-                            <option>LAKE ZURICH</option>
-                            <option>LIBERTYVILLE</option>
-                            <option>MCHENRY</option>
-                            <option>MORTON GROVE</option>
-                            <option>MOUNT PROSPECT</option>
-                            <option>MUNDELEIN</option>
+                            {
+                                Areas.map((item, index) => {
+                                    return (
+                                        <option value={item?.areaName} key={index}>{item?.areaName?.toLowerCase()}</option>
+                                    )
+                                })
+                            }
 
                         </select>
                     </div>
@@ -203,7 +114,7 @@ export default function FeaturedProvidersSection() {
 
                 {/* Providers Grid */}
                 <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">
-                    {providers.map((provider, index) => (
+                    {Services.map((provider, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 40 }}
@@ -215,7 +126,7 @@ export default function FeaturedProvidersSection() {
                             {/* Image */}
                             <div className="relative h-52 overflow-hidden">
                                 <Image
-                                    src={provider.image}
+                                    src={provider.serviceImageUrls[0]}
                                     alt={provider.name}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -236,17 +147,17 @@ export default function FeaturedProvidersSection() {
                                         <Star
                                             key={i}
                                             size={16}
-                                            fill={i < Math.round(provider.rating) ? "currentColor" : "none"}
+                                            fill={i < Math.round(provider?.reviews?.analytics?.average) ? "currentColor" : "none"}
                                             strokeWidth={1.5}
                                         />
                                     ))}
                                     <span className="text-gray-600 text-sm ml-1">
-                                        ({provider.reviews} reviews)
+                                        ({provider?.reviews?.total} reviews)
                                     </span>
                                 </div>
 
                                 <Link
-                                    href={`/services/handyman/carpentry/${provider.id}`}
+                                    href={`/services/handyman/carpentry/${provider._id}`}
                                     className="inline-block mt-2 px-4 py-2 text-sm font-semibold rounded-md bg-[var(--brandBg)] text-white hover:opacity-90 transition"
                                 >
                                     View Profile
