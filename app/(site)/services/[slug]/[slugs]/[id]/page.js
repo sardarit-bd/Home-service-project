@@ -2,12 +2,14 @@
 
 import DetailsPageSideImageWrper from "@/app/componnent/DetaillspageSideImageWrper";
 import ReviewPopUp from "@/app/componnent/ReviewPopUp";
+import ProfileSkeleton from "@/app/componnent/skelaton/ProfileSkeleton";
 import getCookie from "@/utilis/helper/cookie/gettooken";
 import { motion } from "framer-motion";
 import { CheckCircle, Mail, MapPin, Phone, Star } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdOutlineNotificationImportant } from "react-icons/md";
+import { toast, ToastContainer } from "react-toastify";
 
 
 
@@ -85,8 +87,7 @@ export default function ServiceDetailsPage() {
 
 
 
-
-    if (Loading) return <div>Loading...</div>
+    if (Loading) return <ProfileSkeleton />
 
 
 
@@ -304,7 +305,7 @@ export default function ServiceDetailsPage() {
                 {/* RIGHT: STICKY IMAGE CARD */}
                 <DetailsPageSideImageWrper serviceImageUrls={Service?.serviceImageUrls} />
 
-
+                <ToastContainer />
             </div>
         </section>
     );

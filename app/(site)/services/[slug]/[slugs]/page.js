@@ -1,5 +1,6 @@
 "use client";
 
+import SkeletonList from "@/app/componnent/skelaton/SkeletonList";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import Image from "next/image";
@@ -72,7 +73,7 @@ export default function FeaturedProvidersSection() {
     console.log(Services[0]?.reviews?.analytics?.average);
 
 
-    if (Loading) return <div>Loading...</div>
+    if (Loading) return <SkeletonList />
 
 
 
@@ -126,7 +127,7 @@ export default function FeaturedProvidersSection() {
                             {/* Image */}
                             <div className="relative h-52 overflow-hidden">
                                 <Image
-                                    src={provider.serviceImageUrls[0]}
+                                    src={provider.serviceImageUrls[0] ? provider.serviceImageUrls[0] : "/imagenotfound.png"}
                                     alt={provider.name}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-500"
