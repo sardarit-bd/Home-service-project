@@ -167,7 +167,7 @@ export default function AddServicePage() {
           {/* Name */}
           <div>
             <label className="block text-sm font-semibold mb-1">
-              Service Name
+              Company Name (or Personal Name if not Company)
             </label>
             <input
               name="name"
@@ -195,6 +195,34 @@ export default function AddServicePage() {
             />
           </div>
 
+          {/* Discount */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">Promotion Discount</label>
+            <input
+              name="Discount"
+              type="text"
+              placeholder="e.g. 20% or $100 per $1000 order"
+              value={formData.discount}
+              onChange={(e) =>
+                setFormData({ ...formData, discount: e.target.value })
+              }
+              className="w-full border rounded-md px-4 py-2"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold mb-1">Promotio Expiration Date</label>
+            <input
+              name="Expiration"
+              type="date"
+              value={formData.discount}
+              onChange={(e) =>
+                setFormData({ ...formData, discount: e.target.value })
+              }
+              className="w-full border rounded-md px-4 py-2"
+            />
+          </div>
+
           {/* Description */}
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold mb-1">
@@ -212,35 +240,7 @@ export default function AddServicePage() {
             />
           </div>
 
-          {/* Discount */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">Discount</label>
-            <input
-              name="discount"
-              type="number"
-              placeholder="e.g. 200"
-              value={formData.discount}
-              onChange={(e) =>
-                setFormData({ ...formData, discount: e.target.value })
-              }
-              className="w-full border rounded-md px-4 py-2"
-            />
-          </div>
 
-          {/* About */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-semibold mb-1">About</label>
-            <textarea
-              name="about"
-              placeholder="Detailed service description"
-              value={formData.about}
-              onChange={(e) =>
-                setFormData({ ...formData, about: e.target.value })
-              }
-              rows={3}
-              className="w-full border rounded-md px-4 py-2"
-            />
-          </div>
 
           {/* Category & Subcategory */}
           <div>

@@ -12,7 +12,7 @@ const benefits = [
     },
     {
         icon: <Clock size={38} />,
-        title: "Fast Response Time",
+        title: "Trusted Reviews",
         description:
             "Get quick responses and estimates from local experts who value your time and handle your service requests promptly.",
     },
@@ -24,7 +24,7 @@ const benefits = [
     },
     {
         icon: <MapPin size={38} />,
-        title: "Local Chicago Experts",
+        title: "Local Connection",
         description:
             "Connect with home service professionals right in your neighborhood — supporting the Chicago community while saving time.",
     },

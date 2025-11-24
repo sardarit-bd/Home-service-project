@@ -4,7 +4,6 @@ import FeaturedProvidersSection from "../componnent/FeaturedProvidersSection";
 import HeroBGWrper from "../componnent/HeroBg";
 import HowItWorksSection from "../componnent/HowItWorksSection";
 import JoinBannerSection from "../componnent/JoinBannerSection";
-import TestimonialsSection from "../componnent/TestimonialsSection";
 import WhyChooseUsSection from "../componnent/WhyChooseUsSection";
 
 const Homepage = () => {
@@ -20,7 +19,7 @@ const Homepage = () => {
       <Category />
       <HowItWorksSection />
       <WhyChooseUsSection />
-      <TestimonialsSection />
+      {/* <TestimonialsSection /> */}
       <JoinBannerSection />
       <FaqSection />
     </main>

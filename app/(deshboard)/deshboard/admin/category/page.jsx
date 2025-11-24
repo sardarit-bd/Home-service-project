@@ -183,22 +183,7 @@ export default function AddCategoryPage() {
               />
             </div>
 
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-semibold mb-1">
-                Description
-              </label>
-              <textarea
-                placeholder="Short category description..."
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                rows={3}
-                required
-                className="w-full border rounded-md px-4 py-2"
-              />
-            </div>
+
 
             {/* Subcategories */}
             <div>
@@ -240,6 +225,26 @@ export default function AddCategoryPage() {
               </div>
             </div>
 
+
+            {/* Description */}
+            <div>
+              <label className="block text-sm font-semibold mb-1">
+                Description
+              </label>
+              <textarea
+                placeholder="Short category description..."
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                rows={3}
+                required
+                className="w-full border rounded-md px-4 py-2"
+              />
+            </div>
+
+
+
             {/* Submit */}
             <button
               type="submit"
@@ -262,7 +267,7 @@ export default function AddCategoryPage() {
         {/* RIGHT SIDE - Category List */}
         <div className="bg-white shadow-lg rounded-2xl p-8 border-t-4 border-[var(--brandBg)]">
           <h2 className="text-2xl font-bold text-[var(--brandColor)] mb-6">
-            Existing Categories
+            Existing Categories ({categories.length})
           </h2>
 
           <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">

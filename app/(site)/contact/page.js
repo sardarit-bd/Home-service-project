@@ -1,11 +1,80 @@
 "use client";
 
+import MakePost from "@/utilis/requestrespose/post";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function ContactPage() {
+
+
+
+
+
+    const [name, setname] = useState('');
+    const [email, setemail] = useState('');
+    const [subject, setsubject] = useState('');
+    const [message, setmessage] = useState('');
+
+
+
+
+
+    const handleSubmite = async () => {
+        // email can be empty, so check others only
+        if (!name || !email || !subject || !message) {
+            toast.error("Name, Subject and Message are required");
+            return;
+        }
+
+        try {
+            const response = await MakePost("contact", { name, email, subject, message });
+
+            console.log(response);
+
+            if (response.success) {
+                toast.success(response.message);
+                setname("");
+                setemail("");
+                setsubject("");
+                setmessage("");
+            } else {
+                toast.error(response.message || "Something went wrong");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Network error! Please try again.");
+        }
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return (
         <section className="relative min-h-screen text-black bg-white overflow-hidden py-16 md:py-24">
+
+            <ToastContainer />
 
             <div className="container mx-auto px-6 md:px-10 lg:px-16 relative z-10">
                 {/* Title */}
@@ -41,6 +110,7 @@ export default function ContactPage() {
                                 Full Name
                             </label>
                             <input
+                                onChange={(e) => { setname(e.target.value) }}
                                 type="text"
                                 placeholder="John Doe"
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
@@ -52,8 +122,22 @@ export default function ContactPage() {
                                 Email Address
                             </label>
                             <input
+                                onChange={(e) => { setemail(e.target.value) }}
                                 type="email"
                                 placeholder="you@example.com"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
+                            />
+                        </div>
+
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Subject
+                            </label>
+                            <input
+                                onChange={(e) => { setsubject(e.target.value) }}
+                                type="text"
+                                placeholder="Write your subject..."
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
                             />
                         </div>
@@ -63,6 +147,7 @@ export default function ContactPage() {
                                 Message
                             </label>
                             <textarea
+                                onChange={(e) => { setmessage(e.target.value) }}
                                 rows="4"
                                 placeholder="Write your message..."
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
@@ -70,7 +155,7 @@ export default function ContactPage() {
                         </div>
 
                         <button
-                            type="submit"
+                            onClick={() => { handleSubmite() }}
                             className="w-full py-3 font-semibold text-white rounded-lg bg-[var(--brandBg)] hover:opacity-90 transition"
                         >
                             Send Message

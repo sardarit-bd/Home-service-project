@@ -1,25 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import HeroSearchBar from "./HeroSearchBar";
 
 export default function HeroSection() {
-    const router = useRouter();
-    const [showVideo, setShowVideo] = useState(false);
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        const form = e.target;
-
-        console.log("Search query:", form[0].value);
-        // For simplicity, redirecting to a fixed service page
-
-        router.push(`/services/handyman/carpentry?q=${form[0].value}`);
-
-    };
 
 
     return (
@@ -51,37 +36,17 @@ export default function HeroSection() {
                         cleaning, landscaping, and more — all reviewed by real Chicago homeowners.
                     </motion.p>
 
-                    {/* Search Bar */}
-                    <div className="w-full flex justify-center items-center">
-                        <motion.form
-                            onSubmit={(e) => { handleSearch(e) }}
-                            initial={{ opacity: 0, y: 15 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4, duration: 0.7 }}
-                            className="flex relative z-50 items-center justify-center bg-white/90 backdrop-blur-md rounded-full p-2 pl-4 w-full max-w-2xl mx-auto shadow-sm border border-gray-100 md:mx-0"
-                        >
-                            <Search className="text-gray-600" size={22} />
-                            <input
-                                type="text"
-                                placeholder="Search services or area (e.g., Plumbing in Lakeview)"
-                                className="flex-1 bg-transparent outline-none px-3 text-gray-800 placeholder-gray-500"
-                            />
-                            <button type="submit" className="bg-[var(--brandColor,#00a6f4)] text-white px-6 py-2 rounded-full font-semibold hover:opacity-90 transition-all">
-                                Search
-                            </button>
-                        </motion.form>
-
-                    </div>
+                    <HeroSearchBar />
                     {/* CTA Buttons */}
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6, duration: 0.7 }}
-                        className="flex flex-col md:flex-row relative z-50 items-center justify-center  gap-4 mt-11"
+                        className="flex flex-col md:flex-row relative z-50 items-center justify-center  gap-4 mt-11" style={{ zIndex: "0" }}
                     >
                         <Link
                             href="/services/handyman/carpentry"
-                            className="px-8 py-3 bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all"
+                            className="px-8 py-3 bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all "
                         >
                             Write a Review
                         </Link>
