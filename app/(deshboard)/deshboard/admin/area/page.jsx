@@ -168,7 +168,7 @@ export default function AddAreaPage() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {/* Area Name */}
             <div>
-              <label className="block text-sm font-semibold mb-1">Area Name</label>
+              <label className="block text-sm font-semibold mb-1">Metropolitan</label>
               <input
                 type="text"
                 placeholder="e.g. Dhaka, New York"
@@ -181,24 +181,10 @@ export default function AddAreaPage() {
               />
             </div>
 
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-semibold mb-1">Description</label>
-              <textarea
-                placeholder="Short description about area..."
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                rows={3}
-                required
-                className="w-full border rounded-md px-4 py-2"
-              />
-            </div>
 
             {/* Subareas */}
             <div>
-              <label className="block text-sm font-semibold mb-1">Subareas</label>
+              <label className="block text-sm font-semibold mb-1">Areas</label>
               <div className="flex gap-2 mb-2">
                 <input
                   type="text"
@@ -234,6 +220,23 @@ export default function AddAreaPage() {
               </div>
             </div>
 
+
+
+            {/* Description */}
+            <div>
+              <label className="block text-sm font-semibold mb-1">Description</label>
+              <textarea
+                placeholder="Short description about area..."
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                rows={3}
+                required
+                className="w-full border rounded-md px-4 py-2"
+              />
+            </div>
+
             <button
               type="submit"
               disabled={loading}
@@ -255,7 +258,7 @@ export default function AddAreaPage() {
         {/* RIGHT SIDE - Area List */}
         <div className="bg-white shadow-lg rounded-2xl p-8 border-t-4 border-[var(--brandBg)]">
           <h2 className="text-2xl font-bold text-[var(--brandColor)] mb-6">
-            Existing Areas
+            Existing Areas ({areas.length})
           </h2>
 
           <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
@@ -269,7 +272,7 @@ export default function AddAreaPage() {
                 >
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="font-bold text-gray-800 text-lg">
-                      {area.areaName}
+                      <b className="text-sky-500">Metropolitan: </b>  {area.areaName}
                     </h3>
                     <div className="flex gap-2">
                       <button
@@ -289,20 +292,28 @@ export default function AddAreaPage() {
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-600 mb-2">
-                    {area.description || "No description"}
+                  <div className="flex items-center gap-2">
+                    <b>Areas: </b>
+                    <div className="flex flex-wrap gap-2">
+                      {area.subareas?.map((sub, j) => (
+                        <span
+                          key={j}
+                          className="bg-gray-100 border border-gray-200 text-sm text-gray-700 px-3 py-1 rounded-full"
+                        >
+                          {sub}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+
+                  <p className="text-sm text-gray-600 my-2">
+                    <b>Discriptions: </b>{area.description || "No description"}
                   </p>
 
-                  <div className="flex flex-wrap gap-2">
-                    {area.subareas?.map((sub, j) => (
-                      <span
-                        key={j}
-                        className="bg-gray-100 border border-gray-200 text-sm text-gray-700 px-3 py-1 rounded-full"
-                      >
-                        {sub}
-                      </span>
-                    ))}
-                  </div>
+
+
+
                 </div>
               ))
             )}

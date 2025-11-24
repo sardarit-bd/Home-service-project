@@ -20,10 +20,13 @@ export default function AdminContactPage() {
 
     const fetching = useCallback(async () => {
         try {
-            const response = await MakeGet("api/contacts", token);
+            const response = await MakeGet("contact", token);
 
-            if (response?.data?.contacts) {
-                setContacts(response.data.contacts);
+            console.log(response);
+
+
+            if (response?.success) {
+                setContacts(response?.data);
             } else {
                 toast.error("Something went wrong");
             }
@@ -49,7 +52,7 @@ export default function AdminContactPage() {
     async function deleteContact(id) {
 
         setLoading(true);
-        const response = await MakeDelete(`api/contacts/${id}`, token);
+        const response = await MakeDelete(`contact/${id}`, token);
 
         setLoading(false);
 
@@ -62,6 +65,10 @@ export default function AdminContactPage() {
         }
 
     }
+
+
+
+    console.log(contacts);
 
 
 
@@ -94,9 +101,9 @@ export default function AdminContactPage() {
                                 >
                                     <td className="border p-2">{c.name}</td>
                                     <td className="border p-2">{c.email}</td>
-                                    <td className="border p-2">{c.sub}</td>
+                                    <td className="border p-2">{c.subject}</td>
                                     <td className="border p-2 text-center ">
-                                        <span onClick={() => { deleteContact(c?.id) }} className="bg-red-300 px-2 py-1 rounded cursor-pointer">
+                                        <span onClick={() => { deleteContact(c?._id) }} className="bg-red-300 px-2 py-1 rounded cursor-pointer">
                                             Delete
                                         </span>
                                     </td>
@@ -106,7 +113,7 @@ export default function AdminContactPage() {
                                 {active === index && (
                                     <tr className="bg-gray-100">
                                         <td colSpan={4} className="p-2 text-gray-500">
-                                            {c.mes}
+                                            {c.message}
                                         </td>
                                     </tr>
                                 )}

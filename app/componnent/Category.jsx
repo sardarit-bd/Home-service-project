@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Droplets, Leaf, Wrench } from "lucide-react";
+import { Bolt, DoorOpen, Droplets, Hammer, Home, House, Leaf, Paintbrush, SprayCan, Square, Wind, Wrench } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import Electricals from "../../public/Electricals.jpg";
 import handyman from "../../public/handyman.jpeg";
-import outdoor from "../../public/outdoor.jpg";
+import Landscaping from "../../public/outdoor.jpg";
 import plumbing from "../../public/plumbing.jpg";
 
 const services = [
@@ -23,7 +24,7 @@ const services = [
             "Beautify your outdoors with expert lawn care, patio design, fencing, and full landscaping solutions crafted for Chicago homes.",
         icon: <Leaf size={36} />,
         link: "/services/landscaping",
-        image: outdoor,
+        image: Landscaping,
     },
     {
         title: "Plumbing Solutions",
@@ -32,6 +33,78 @@ const services = [
         icon: <Droplets size={36} />,
         link: "/services/plumbing",
         image: plumbing,
+    },
+    {
+        title: "Electrical Services",
+        description:
+            "Certified electricians providing safe wiring, lighting upgrades, panel repairs, outlet installation, and full electrical troubleshooting.",
+        icon: <Bolt size={36} />,
+        link: "/services/electrical",
+        image: Electricals,
+    },
+    {
+        title: "Remodeling",
+        description:
+            "From kitchen makeovers to full home renovations, our remodeling experts create modern, functional living spaces tailored to your lifestyle.",
+        icon: <Home size={36} />,
+        link: "/services/remodeling",
+        image: handyman,
+    },
+    {
+        title: "Roofing",
+        description:
+            "Professional roofing repair, installation, leak fixing, shingle replacement, and long-lasting weather protection for your home.",
+        icon: <House size={36} />,
+        link: "/services/roofing",
+        image: handyman,
+    },
+    {
+        title: "Painting & Flooring",
+        description:
+            "Interior & exterior painting, hardwood installation, tile work, refinishing, and all types of flooring upgrades done with precision.",
+        icon: <Paintbrush size={36} />,
+        link: "/services/painting-flooring",
+        image: handyman,
+    },
+    {
+        title: "Cleaning Services",
+        description:
+            "Top-rated home and business cleaning, deep cleaning, move-in/move-out services, and scheduled maintenance for spotless spaces.",
+        icon: <SprayCan size={36} />,
+        link: "/services/cleaning",
+        image: handyman,
+    },
+    {
+        title: "HVAC",
+        description:
+            "Heating, cooling, furnace repair, AC installation, and indoor air quality services by trained HVAC specialists.",
+        icon: <Wind size={36} />,
+        link: "/services/hvac",
+        image: handyman,
+    },
+    {
+        title: "Windows & Doors",
+        description:
+            "Replace, repair, or upgrade your windows and doors with professional installation for better security, style, and energy efficiency.",
+        icon: <DoorOpen size={36} />,
+        link: "/services/windows-doors",
+        image: handyman,
+    },
+    {
+        title: "Concrete Services",
+        description:
+            "Driveways, sidewalks, patios, foundation repair, and decorative concrete work designed to last for years.",
+        icon: <Square size={36} />,
+        link: "/services/concrete",
+        image: handyman,
+    },
+    {
+        title: "Other Home Services",
+        description:
+            "Can’t find what you need? We offer hundreds of additional home services from certified and trusted Chicago professionals.",
+        icon: <Hammer size={36} />,
+        link: "/services/others",
+        image: handyman,
     },
 ];
 
@@ -90,7 +163,7 @@ export default function AfterHeroSection() {
                                     href={service.link}
                                     className="inline-block font-semibold text-[var(--brandColor)] hover:underline"
                                 >
-                                    Learn More →
+                                    See All Providers →
                                 </Link>
                             </div>
                         </motion.div>

@@ -1,6 +1,9 @@
 "use client";
 
 import SkeletonList from "@/app/componnent/skelaton/SkeletonList";
+import useSearchStore from "@/store/useSearchStore";
+import filterServices from "@/utilis/helper/filterServices";
+import getLastTwoArray from "@/utilis/helper/getLastTwoArray";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import Image from "next/image";
@@ -22,6 +25,7 @@ export default function FeaturedProvidersSection() {
     const [Areas, setAreas] = useState([]);
     const [Services, setServices] = useState([]);
     const [Loading, setLoading] = useState(false);
+    const { services, setsubservices, subservices, setservices, area, setarea } = useSearchStore();
 
 
 
@@ -62,48 +66,56 @@ export default function FeaturedProvidersSection() {
     useEffect(() => {
         fetchAreas();
         fetchServices();
+        const result = getLastTwoArray(pathName);
+        setservices(result[0]);
+        setsubservices(result[1]);
     }, []);
 
 
 
 
-    console.log(Services);
+
+    //filter services here
+    const filteredServices = filterServices(Services, { area, category: services, sub: subservices });
 
 
-    console.log(Services[0]?.reviews?.analytics?.average);
+
+
+
+
+    console.log(filteredServices);
+
+
+// handyman
+
+// carpentry
 
 
     if (Loading) return <SkeletonList />
 
 
-
-
     return (
-        <section className="py-20 bg-white text-black relative">
+        <section className="py-8 bg-white text-black relative">
             <div className="container mx-auto px-6 md:px-10 lg:px-16">
 
 
-                <div className="flex flex-col md:flex-row items-center justify-between w-full bg-sky-50 mb-10 px-1 md:px-5 py-3 rounded-2xl shadow-sm border border-sky-100">
+                <div className="flex flex-col md:flex-row items-center justify-between w-full mb-10 px-1 md:px-5 py-3">
 
-                    {/* Left Title */}
-                    <h2 className="text-xl md:text-3xl font-semibold text-gray-800 text-nowrap flex flex-col md:flex-row items-center gap-2">
-                        <span>
-                            Search For:
-                        </span>
-                        <span className="text-sm lg:text-2xl text-gray-600">
-                            {pathName.split("/")[pathName.split("/").length - 2].toLocaleUpperCase()} , {pathName.split("/")[pathName.split("/").length - 1].toLocaleUpperCase()}
-                        </span>
 
-                    </h2>
+
+                    <div>
+                        <h3 className="text-2xl text-nowrap capitalize">{`${services.toLowerCase()},${subservices.toLowerCase()} `}Services Providers Profile</h3>
+                    </div>
+
 
                     {/* Right Dropdown */}
-                    <div className="flex mt-3 md:mt-0 items-center justify-end w-full">
-                        <select className="px-1 md:px-5 w-full md:w-fit py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 focus:ring-2 focus:ring-[var(--brandColor)] focus:outline-none cursor-pointer">
+                    <div value={area} onChange={(e) => { setarea(e.target.value.toLowerCase()) }} className="flex md:mt-0 items-center justify-end w-full">
+                        <select className="px-1 md:px-5 w-full md:w-fit py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 focus:outline-none cursor-pointer capitalize outline-none">
 
                             {
-                                Areas.map((item, index) => {
+                                Areas?.map((item, index) => {
                                     return (
-                                        <option value={item?.areaName} key={index}>{item?.areaName?.toLowerCase()}</option>
+                                        <option className="capitalize" value={item?.areaName.toLowerCase()} key={index}>{item?.areaName?.toLowerCase()}</option>
                                     )
                                 })
                             }
