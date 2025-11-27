@@ -1,10 +1,12 @@
 "use client";
 
+import AreaSelector from "@/app/componnent/AreaSelector";
 import getCookie from "@/utilis/helper/cookie/gettooken";
 import MakePost from "@/utilis/requestrespose/post";
 import { UploadCloud, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import CategorySelector from "../../../../componnent/CategorySelector";
 
 export default function AddServicePage() {
   const token = getCookie();
@@ -66,38 +68,90 @@ export default function AddServicePage() {
   const [categoryInput, setCategoryInput] = useState("");
   const [areaInput, setAreaInput] = useState("");
   const [showCatSuggestions, setShowCatSuggestions] = useState(false);
-
+  const [Categories, setCategories] = useState([]);
+  const [Areas, setAreas] = useState([]);
   const currentSubcategories = categoryOptions[formData.category] || [];
 
-  // --- Category & Area logic ---
-  const addCategory = (tag) => {
-    if (!formData.categories.includes(tag)) {
-      setFormData((p) => ({ ...p, categories: [...p.categories, tag] }));
+  const [selectedCategories, setSelectedCategories] = useState('');
+  const [selectedAreas, setSelectedAreas] = useState('');
+  const [selectedSubcategories, setSelectedSubcategories] = useState([]);
+  const [selectedSubareas, setSelectedSubareas] = useState([]);
+
+
+
+
+  // fetch the catagor and seub catagory here
+  // --- Fetch All Categories ---
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/allcatagory`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await res.json();
+      if (data.success) setCategories(data.total || []);
+    } catch (err) {
+      console.error("Failed to load categories:", err);
     }
-    setCategoryInput("");
-    setShowCatSuggestions(false);
   };
 
-  const removeCategory = (tag) => {
-    setFormData((p) => ({
-      ...p,
-      categories: p.categories.filter((t) => t !== tag),
-    }));
-  };
 
-  const addArea = (area) => {
-    if (area && !formData.areas.includes(area)) {
-      setFormData((p) => ({ ...p, areas: [...p.areas, area] }));
-      setAreaInput("");
+  // --- Fetch All Areas ---
+  const fetchAreas = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/allarea`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await res.json();
+      if (data.success) setAreas(data.total || []);
+    } catch (err) {
+      console.error("Failed to load areas:", err);
     }
   };
 
-  const removeArea = (area) => {
-    setFormData((p) => ({
-      ...p,
-      areas: p.areas.filter((a) => a !== area),
-    }));
-  };
+  useEffect(() => {
+    fetchCategories();
+    fetchAreas();
+  }, []);
+
+
+
+
+  console.log(Areas);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // --- File handling ---
   const handleFileChange = (e) => {
@@ -124,7 +178,6 @@ export default function AddServicePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
 
     const fd = new FormData();
     Object.keys(formData).forEach((key) => {
@@ -153,6 +206,30 @@ export default function AddServicePage() {
     }
   };
 
+
+
+
+
+
+
+
+
+
+  console.log(selectedAreas);
+  console.log(selectedCategories);
+
+
+  console.log(selectedSubareas);
+  console.log(selectedSubcategories);
+
+
+
+
+
+
+
+
+
   return (
     <section className="">
       <div className="">
@@ -160,8 +237,7 @@ export default function AddServicePage() {
           Add New Service
         </h2>
 
-        <form
-          onSubmit={handleSubmit}
+        <div
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {/* Name */}
@@ -176,24 +252,51 @@ export default function AddServicePage() {
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-[var(--brandColor)]"
+              className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
           </div>
 
+
+
           {/* Price */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">Price</label>
+          <div className="">
+            <label className="block text-sm font-semibold mb-1">Experience</label>
             <input
-              name="price"
+              name="Experience"
               type="number"
-              placeholder="e.g. 3000"
+              placeholder="e.g. 2"
               value={formData.price}
               onChange={(e) =>
                 setFormData({ ...formData, price: e.target.value })
               }
-              className="w-full border rounded-md px-4 py-2"
+              className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
           </div>
+
+
+
+
+
+
+
+          {/* Category & Subcategory */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">Category</label>
+
+            <CategorySelector Categories={Categories} selectedCategory={selectedCategories} selectedSubcategories={selectedSubcategories} setSelectedCategory={setSelectedCategories} setSelectedSubcategories={setSelectedSubcategories} />
+
+          </div>
+
+          <div>
+
+            <label className="block text-sm font-semibold mb-1">Metropolitan</label>
+
+            <AreaSelector Areas={Areas} selectedAreas={selectedAreas} selectedSubareas={selectedSubareas} setSelectedAreas={setSelectedAreas} setSelectedSubareas={setSelectedSubareas} />
+
+          </div>
+
+
+
 
           {/* Discount */}
           <div>
@@ -206,7 +309,7 @@ export default function AddServicePage() {
               onChange={(e) =>
                 setFormData({ ...formData, discount: e.target.value })
               }
-              className="w-full border rounded-md px-4 py-2"
+              className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
           </div>
 
@@ -219,9 +322,46 @@ export default function AddServicePage() {
               onChange={(e) =>
                 setFormData({ ...formData, discount: e.target.value })
               }
-              className="w-full border rounded-md px-4 py-2"
+              className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
           </div>
+
+
+
+
+          <div>
+            <label className="block text-sm font-semibold mb-1">Email Address</label>
+            <input
+              name="Expiration"
+              type="email"
+              value={formData.discount}
+              onChange={(e) =>
+                setFormData({ ...formData, discount: e.target.value })
+              }
+              className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+            />
+          </div>
+
+
+          <div>
+            <label className="block text-sm font-semibold mb-1">Phone Number</label>
+            <input
+              name="Expiration"
+              type="phone"
+              value={formData.discount}
+              onChange={(e) =>
+                setFormData({ ...formData, discount: e.target.value })
+              }
+              className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+            />
+          </div>
+
+
+
+
+
+
+
 
           {/* Description */}
           <div className="md:col-span-2">
@@ -236,68 +376,25 @@ export default function AddServicePage() {
                 setFormData({ ...formData, description: e.target.value })
               }
               rows={3}
-              className="w-full border rounded-md px-4 py-2"
+              className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
           </div>
 
 
 
-          {/* Category & Subcategory */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">Category</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  category: e.target.value,
-                  subcategory: "",
-                })
-              }
-              className="w-full border rounded-md px-4 py-2"
-            >
-              <option value="">Select Category</option>
-              {Object.keys(categoryOptions).map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
 
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Subcategory
-            </label>
-            <select
-              name="subcategory"
-              value={formData.subcategory}
-              onChange={(e) =>
-                setFormData({ ...formData, subcategory: e.target.value })
-              }
-              disabled={!formData.category}
-              className="w-full border rounded-md px-4 py-2"
-            >
-              <option value="">Select Subcategory</option>
-              {currentSubcategories.map((sub) => (
-                <option key={sub} value={sub}>
-                  {sub}
-                </option>
-              ))}
-            </select>
-          </div>
+
 
           {/* License & Insurance */}
           <div>
             <label className="block text-sm font-semibold mb-1">
-              License File
+              License File <span className="text-xs text-gray-500 bg-red-100 px-1 rounded-lg">Only Png,jpg,jpeg and pdf</span>
             </label>
             <input
               type="file"
               name="license"
               onChange={handleFileChange}
-              className="w-full border rounded-md px-4 py-2"
+              className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
             {formData.license && (
               <div
@@ -320,105 +417,26 @@ export default function AddServicePage() {
           </div>
           <div>
             <label className="block text-sm font-semibold mb-1">
-              Insurance File
+              Insurance File <span className="text-xs text-gray-500 bg-red-100 px-1 rounded-lg">Only Png,jpg,jpeg and pdf</span>
             </label>
             <input
               type="file"
               name="insurance"
               onChange={handleFileChange}
-              className="w-full border rounded-md px-4 py-2"
+              className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
           </div>
 
-          {/* Categories Tags */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-semibold mb-1">
-              Categories (Tags)
-            </label>
-            <div className="border rounded-md p-2 flex flex-wrap gap-2 items-center">
-              {formData.categories.map((cat, i) => (
-                <span
-                  key={i}
-                  className="bg-[var(--brandBg)] text-white px-3 py-1 rounded-full flex items-center gap-1"
-                >
-                  {cat}
-                  <button type="button" onClick={() => removeCategory(cat)}>
-                    <X size={14} />
-                  </button>
-                </span>
-              ))}
-              <input
-                value={categoryInput}
-                onChange={(e) => {
-                  setCategoryInput(e.target.value);
-                  setShowCatSuggestions(true);
-                }}
-                placeholder="Type to add category..."
-                className="flex-grow border-none outline-none p-2"
-              />
-            </div>
 
-            {showCatSuggestions && (
-              <div className="mt-1 border rounded-md shadow bg-white max-h-40 overflow-y-auto">
-                {suggestedTags
-                  .filter((t) =>
-                    t.toLowerCase().includes(categoryInput.toLowerCase())
-                  )
-                  .map((t) => (
-                    <div
-                      key={t}
-                      onClick={() => addCategory(t)}
-                      className="px-3 py-2 cursor-pointer hover:bg-gray-100"
-                    >
-                      {t}
-                    </div>
-                  ))}
-                {suggestedTags.filter((t) =>
-                  t.toLowerCase().includes(categoryInput.toLowerCase())
-                ).length === 0 &&
-                  categoryInput && (
-                    <div
-                      onClick={() => addCategory(categoryInput)}
-                      className="px-3 py-2 text-[var(--brandColor)] cursor-pointer hover:bg-gray-50"
-                    >
-                      + Add “{categoryInput}”
-                    </div>
-                  )}
-              </div>
-            )}
-          </div>
 
-          {/* Areas */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-semibold mb-1">Areas</label>
-            <div className="border rounded-md p-2 flex flex-wrap gap-2 items-center">
-              {formData.areas.map((area, i) => (
-                <span
-                  key={i}
-                  className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full flex items-center gap-1"
-                >
-                  {area}
-                  <button type="button" onClick={() => removeArea(area)}>
-                    <X size={14} />
-                  </button>
-                </span>
-              ))}
-              <input
-                value={areaInput}
-                onChange={(e) => setAreaInput(e.target.value)}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && (e.preventDefault(), addArea(areaInput))
-                }
-                placeholder="Type area and press Enter..."
-                className="flex-grow border-none outline-none p-2"
-              />
-            </div>
-          </div>
+
+
+
 
           {/* Service Images */}
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold mb-1">
-              Service Images
+              Service Images <span className="text-xs text-gray-500 bg-red-100 px-1 rounded-lg">Only Png,jpg,jpeg</span>
             </label>
             <div
               className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-[var(--brandColor)] transition bg-gray-50"
@@ -480,14 +498,14 @@ export default function AddServicePage() {
           {/* Submit Button */}
           <div className="md:col-span-2 flex justify-center mt-8">
             <button
-              type="submit"
+              onClick={(e) => { handleSubmit(e) }}
               disabled={loading}
               className="bg-[var(--brandBg)] hover:bg-sky-600 text-white font-semibold py-3 px-12 rounded-full transition-all shadow-md"
             >
               {loading ? "Submitting..." : "Add Service"}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </section>
   );
