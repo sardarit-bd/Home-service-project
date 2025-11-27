@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function AdminDashboard() {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [stats, setStats] = useState(null);
 
     const [chartSeries, setChartSeries] = useState([
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
             }
         }
 
-        fetchData();
+        //fetchData();
     }, []);
 
     if (loading) return <DashboardSkeleton />;

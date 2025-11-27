@@ -106,48 +106,128 @@ export default function ProfilePage() {
                         <ProfileSkleton />
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-5">
-                            {/* Name */}
-                            <div>
-                                <label className="block text-gray-700 mb-1">Name</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={name}
-                                    disabled={!isedit}
-                                    onChange={(e) => { setname(e.target.value) }}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                />
+
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+                                {/* Name */}
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Frist Name</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={name}
+                                        disabled={!isedit}
+                                        onChange={(e) => { setname(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Middle Name</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={name}
+                                        disabled={!isedit}
+                                        onChange={(e) => { setname(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Last Name</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={name}
+                                        disabled={!isedit}
+                                        onChange={(e) => { setname(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
                             </div>
 
-                            {/* Email */}
-                            <div>
-                                <label className="block text-gray-700 mb-1">Email</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    disabled={true}
-                                    value={email}
-                                    onChange={(e) => { setemail(e.target.value) }}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                />
-                            </div>
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-3">
 
-                            {/* phone */}
-                            <div>
-                                <label className="block text-gray-700 mb-1">Phone</label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    disabled={!isedit}
-                                    value={phone && phone != null ? phone : ""}
-                                    onChange={(e) => { setphone(e.target.value) }}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                />
+                                {/* Email */}
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">username</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        disabled={true}
+                                        value={email}
+                                        onChange={(e) => { setemail(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+
+                                {/* Email */}
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Email</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        disabled={true}
+                                        value={email}
+                                        onChange={(e) => { setemail(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+
+                                {/* phone */}
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Phone</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        disabled={!isedit}
+                                        value={phone && phone != null ? phone : ""}
+                                        onChange={(e) => { setphone(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
                             </div>
 
                             {/* Address */}
+
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">City</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        disabled={!isedit}
+                                        value={phone && phone != null ? phone : ""}
+                                        onChange={(e) => { setphone(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Zip Code</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        disabled={!isedit}
+                                        value={phone && phone != null ? phone : ""}
+                                        onChange={(e) => { setphone(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Address</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        disabled={!isedit}
+                                        value={phone && phone != null ? phone : ""}
+                                        onChange={(e) => { setphone(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+                            </div>
+
                             <div>
-                                <label className="block text-gray-700 mb-1">Address</label>
+                                <label className="block text-gray-700 mb-1">Address Two</label>
                                 <textarea
                                     name="address"
                                     value={address && address != null ? address : ""}

@@ -112,11 +112,11 @@ export default function ServiceDetailsPage() {
                                 <Star
                                     key={i}
                                     size={18}
-                                    fill={i < 5 ? "currentColor" : "none"}
+                                    fill={i < Math.round(Service?.reviews?.analytics?.average) ? "currentColor" : "none"}
                                     strokeWidth={1.5}
                                 />
                             ))}
-                            <span className="text-gray-600 ml-2 text-sm">(128 reviews)</span>
+                            <span className="text-gray-600 ml-2 text-sm">{Service?.reviews?.total} Reviews</span>
                         </div>
                         <p className="text-gray-700 max-w-2xl leading-relaxed">
                             Reliable, experienced, and affordable handyman services across Chicago — handling everything from minor repairs to full home maintenance.
@@ -125,7 +125,7 @@ export default function ServiceDetailsPage() {
 
                         <div className={`absolute top-20 left-0 w-[300px] h-auto rounded=md shadow-md z-50 bg-gray-50`}>
 
-                            <ReviewPopUp />
+                            <ReviewPopUp Reviews={Service?.reviews} />
 
                         </div>
 
