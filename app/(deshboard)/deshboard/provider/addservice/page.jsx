@@ -1,41 +1,41 @@
 "use client";
 
 import AreaSelector from "@/app/componnent/AreaSelector";
+import Loading from "@/app/componnent/Loading";
 import getCookie from "@/utilis/helper/cookie/gettooken";
-import MakePost from "@/utilis/requestrespose/post";
-import { UploadCloud, X } from "lucide-react";
+import handleFiles from "@/utilis/helper/handleFiles";
+import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react";
+import { RxCross2 } from "react-icons/rx";
 import { toast } from "react-toastify";
 import CategorySelector from "../../../../componnent/CategorySelector";
 
 export default function AddServicePage() {
   const token = getCookie();
   const [loading, setLoading] = useState(false);
-
-  const categoryOptions = {
-    Handyman: [
-      "Carpentry",
-      "Electrical",
-      "Plumbing",
-      "Painting",
-      "Furniture Assembly",
-    ],
-    Plumbing: ["Faucets", "Pipes", "Water Heater", "Drain Cleaning"],
-    Electrical: [
-      "Lights",
-      "Wiring",
-      "Fan Installation",
-      "Switches",
-      "Generator",
-    ],
-    Landscaping: [
-      "Lawn Care",
-      "Tree Trimming",
-      "Garden Design",
-      "Fence Installation",
-    ],
-    HVAC: ["Air Conditioning", "Heating", "Thermostat", "Other HVAC Services"],
-  };
+  //   Handyman: [
+  //     "Carpentry",
+  //     "Electrical",
+  //     "Plumbing",
+  //     "Painting",
+  //     "Furniture Assembly",
+  //   ],
+  //   Plumbing: ["Faucets", "Pipes", "Water Heater", "Drain Cleaning"],
+  //   Electrical: [
+  //     "Lights",
+  //     "Wiring",
+  //     "Fan Installation",
+  //     "Switches",
+  //     "Generator",
+  //   ],
+  //   Landscaping: [
+  //     "Lawn Care",
+  //     "Tree Trimming",
+  //     "Garden Design",
+  //     "Fence Installation",
+  //   ],
+  //   HVAC: ["Air Conditioning", "Heating", "Thermostat", "Other HVAC Services"],
+  // };
 
   const suggestedTags = [
     "Carpentry",
@@ -50,27 +50,25 @@ export default function AddServicePage() {
     "Roofing",
   ];
 
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    category: "",
-    subcategory: "",
-    price: "",
-    discount: "",
-    about: "",
-    license: null,
-    insurance: null,
-    categories: [],
-    areas: [],
-    serviceImages: [],
-  });
+  const [name, setname] = useState('');
+  const [experience, setexperience] = useState('');
+  const [promotiondis, setpromotiondis] = useState('');
+  const [promotionalpriod, setpromotionalpriod] = useState('');
+  const [email, setemail] = useState('');
+  const [phone, setphone] = useState('');
+  const [description, setdescription] = useState('');
+  const [license, setlicense] = useState([]);
+  const [insurance, setinsurance] = useState([]);
+  const [serviceImages, setserviceImages] = useState([]);
+
+
 
   const [categoryInput, setCategoryInput] = useState("");
   const [areaInput, setAreaInput] = useState("");
   const [showCatSuggestions, setShowCatSuggestions] = useState(false);
   const [Categories, setCategories] = useState([]);
   const [Areas, setAreas] = useState([]);
-  const currentSubcategories = categoryOptions[formData.category] || [];
+
 
   const [selectedCategories, setSelectedCategories] = useState('');
   const [selectedAreas, setSelectedAreas] = useState('');
@@ -122,85 +120,72 @@ export default function AddServicePage() {
 
 
 
-  console.log(Areas);
+
+
+  /******************* handle remove function is here ***********************/
+  function handleRemoveFile(index, serviceImages, setServiceImages) {
+    const updated = serviceImages.filter((_, i) => i !== index);
+    setServiceImages(updated);
+  }
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // --- File handling ---
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setFormData((p) => ({ ...p, [name]: files[0] }));
-  };
-
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    setFormData((p) => ({
-      ...p,
-      serviceImages: [...p.serviceImages, ...files],
-    }));
-  };
-
-  const removeImage = (idx) => {
-    setFormData((p) => ({
-      ...p,
-      serviceImages: p.serviceImages.filter((_, i) => i !== idx),
-    }));
-  };
-
-  // --- Submit ---
+  /************** handle serviecess added funciton is here ******************/
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const fd = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (key === "serviceImages") {
-        formData.serviceImages.forEach((f) => fd.append("serviceImages", f));
-      } else if (Array.isArray(formData[key])) {
-        formData[key].forEach((v) => fd.append(key, v));
-      } else {
-        fd.append(key, formData[key]);
-      }
-    });
 
-    console.log("Submitting FormData:", [...fd.entries()]);
+
+
+    const passedData = {
+      name: name,
+      experience: experience,
+      promotiondis: promotiondis,
+      promotionalpriod: promotionalpriod,
+      email: email,
+      phone: phone,
+      description: description,
+      selectedCategories: selectedCategories,
+      selectedAreas: selectedAreas,
+      selectedSubcategories: selectedSubcategories,
+      selectedSubareas: selectedSubareas,
+      license: license,
+      insurance: insurance,
+      serviceImages: serviceImages,
+    };
+
+
 
     try {
-      const res = await MakePost("createproduct", fd, token);
-      toast.success(
-        res?.success
-          ? "✅ Service created successfully!"
-          : "❌ Failed to create service."
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/createProduct`,
+        {
+          method: "POST",
+          // ❗ DO NOT SET CONTENT-TYPE when using FormData
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(passedData),
+        }
       );
-    } catch {
-      toast.success("⚠️ Network error.");
+
+      const data = await res.json();
+      console.log(data);
+
+      if (!res.ok) {
+        toast.error("⚠️ Request failed");
+      } else {
+        toast.success("Product created!");
+      }
+
+    } catch (err) {
+      console.log(err);
+      toast.error("⚠️ Network error.");
     } finally {
       setLoading(false);
     }
@@ -211,27 +196,11 @@ export default function AddServicePage() {
 
 
 
-
-
-
-
-  console.log(selectedAreas);
-  console.log(selectedCategories);
-
-
-  console.log(selectedSubareas);
-  console.log(selectedSubcategories);
-
-
-
-
-
-
-
-
-
   return (
     <section className="">
+
+      {loading && <Loading />}
+
       <div className="">
         <h2 className="text-3xl font-bold text-[var(--brandColor)] mb-8 text-center">
           Add New Service
@@ -248,9 +217,9 @@ export default function AddServicePage() {
             <input
               name="name"
               placeholder="Enter service name"
-              value={formData.name}
+              value={name}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setname(e.target.value)
               }
               className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
@@ -265,9 +234,9 @@ export default function AddServicePage() {
               name="Experience"
               type="number"
               placeholder="e.g. 2"
-              value={formData.price}
+              value={experience}
               onChange={(e) =>
-                setFormData({ ...formData, price: e.target.value })
+                setexperience(e.target.value)
               }
               className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
@@ -305,9 +274,9 @@ export default function AddServicePage() {
               name="Discount"
               type="text"
               placeholder="e.g. 20% or $100 per $1000 order"
-              value={formData.discount}
+              value={promotiondis}
               onChange={(e) =>
-                setFormData({ ...formData, discount: e.target.value })
+                setpromotiondis(e.target.value)
               }
               className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
@@ -318,9 +287,9 @@ export default function AddServicePage() {
             <input
               name="Expiration"
               type="date"
-              value={formData.discount}
+              value={promotionalpriod}
               onChange={(e) =>
-                setFormData({ ...formData, discount: e.target.value })
+                setpromotionalpriod(e.target.value)
               }
               className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
@@ -334,9 +303,9 @@ export default function AddServicePage() {
             <input
               name="Expiration"
               type="email"
-              value={formData.discount}
+              value={email}
               onChange={(e) =>
-                setFormData({ ...formData, discount: e.target.value })
+                setemail(e.target.value)
               }
               className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
@@ -348,9 +317,9 @@ export default function AddServicePage() {
             <input
               name="Expiration"
               type="phone"
-              value={formData.discount}
+              value={phone}
               onChange={(e) =>
-                setFormData({ ...formData, discount: e.target.value })
+                setphone(e.target.value)
               }
               className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
@@ -371,9 +340,9 @@ export default function AddServicePage() {
             <textarea
               name="description"
               placeholder="Short description about service"
-              value={formData.description}
+              value={description}
               onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+                setdescription(e.target.value)
               }
               rows={3}
               className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
@@ -393,26 +362,65 @@ export default function AddServicePage() {
             <input
               type="file"
               name="license"
-              onChange={handleFileChange}
+              multiple
+              onChange={(e) => { handleFiles(e, license, setlicense) }}
               className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
-            {formData.license && (
-              <div
-                className="relative w-[100px] overflow-hidden mt-2 group"
-              >
-                <img
-                  src={URL.createObjectURL(formData.license)}
-                  alt="preview"
-                  className="object-cover w-[100px]"
-                />
-                <button
-                  type="button"
-                  onClick={() => setFormData((p) => ({ ...p, license: null }))}
-                  className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
-                >
-                  <X size={14} />
-                </button>
-              </div>
+            {license.length > 0 && (
+
+
+              license?.map((item, index) => {
+                return (
+
+                  <div key={index}>
+                    {
+                      item?.type === 'application/pdf' ? (
+
+                        <div
+                          className="flex items-center gap-3 mt-3 bg-sky-100 p-2 rounded-lg relative"
+                        >
+                          <div className="w-[40px] h-[40px] flex items-center justify-center object-cover rounded-lg bg-red-600 text-white">
+                            pdf
+                          </div>
+
+                          <span>{item?.name}</span>
+
+                          <div>
+                            <button
+                              onClick={() => { handleRemoveFile(index, license, setlicense) }}
+                              className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-600 text-white cursor-pointer"
+                            >
+                              <RxCross2 className="text-white text-lg" />
+                            </button>
+                          </div>
+                        </div>
+
+                      ) : (
+                        <div
+                          className="flex items-center gap-3 mt-3 bg-sky-100 p-2 rounded-lg relative"
+                        >
+                          <img
+                            src={item?.base64}
+                            alt="Image"
+                            className="w-[60px] h-[60px] object-cover rounded-lg"
+                          />
+                          <span>{item?.name}</span>
+                          <div>
+                            <button
+                              onClick={() => { handleRemoveFile(index, license, setlicense) }}
+                              className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-600 text-white cursor-pointer"
+                            >
+                              <RxCross2 className="text-white text-lg" />
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    }
+
+                  </div>
+
+                )
+              })
             )}
           </div>
           <div>
@@ -422,10 +430,85 @@ export default function AddServicePage() {
             <input
               type="file"
               name="insurance"
-              onChange={handleFileChange}
+              multiple
+              onChange={(e) => { handleFiles(e, insurance, setinsurance) }}
               className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
             />
+
+
+
+
+
+
+
+
+
+            {insurance.length > 0 && (
+
+
+              insurance?.map((item, index) => {
+                return (
+
+                  <div key={index}>
+                    {
+                      item?.type === 'application/pdf' ? (
+
+                        <div
+                          className="flex items-center gap-3 mt-3 bg-sky-100 p-2 rounded-lg relative"
+                        >
+                          <div className="w-[40px] h-[40px] flex items-center justify-center object-cover rounded-lg bg-red-600 text-white">
+                            pdf
+                          </div>
+
+                          <span>{item?.name}</span>
+
+                          <div>
+                            <button
+                              onClick={() => { handleRemoveFile(index, insurance, setinsurance) }}
+                              className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-600 text-white cursor-pointer"
+                            >
+                              <RxCross2 className="text-white text-lg" />
+                            </button>
+                          </div>
+                        </div>
+
+                      ) : (
+                        <div
+                          className="flex items-center gap-3 mt-3 bg-sky-100 p-2 rounded-lg relative"
+                        >
+                          <img
+                            src={item?.base64}
+                            alt="Image"
+                            className="w-[60px] h-[60px] object-cover rounded-lg"
+                          />
+                          <span>{item?.name}</span>
+
+                          <div>
+                            <button
+                              onClick={() => { handleRemoveFile(index, insurance, setinsurance) }}
+                              className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-600 text-white cursor-pointer"
+                            >
+                              <RxCross2 className="text-white text-lg" />
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    }
+
+                  </div>
+
+                )
+              })
+            )}
+
+
+
+
+
+
           </div>
+
+
 
 
 
@@ -440,15 +523,6 @@ export default function AddServicePage() {
             </label>
             <div
               className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-[var(--brandColor)] transition bg-gray-50"
-              onDrop={(e) => {
-                e.preventDefault();
-                const files = Array.from(e.dataTransfer.files);
-                setFormData((p) => ({
-                  ...p,
-                  serviceImages: [...p.serviceImages, ...files],
-                }));
-              }}
-              onDragOver={(e) => e.preventDefault()}
             >
               <UploadCloud className="mx-auto text-gray-400" size={36} />
               <p className="text-sm text-gray-500 mb-2">
@@ -458,7 +532,7 @@ export default function AddServicePage() {
                 type="file"
                 multiple
                 accept="image/*"
-                onChange={handleImageUpload}
+                onChange={(e) => { handleFiles(e, serviceImages, setserviceImages) }}
                 className="hidden"
                 id="fileUpload"
               />
@@ -470,29 +544,46 @@ export default function AddServicePage() {
               </label>
             </div>
 
-            {formData.serviceImages.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-4">
-                {formData.serviceImages.map((img, i) => (
-                  <div
-                    key={i}
-                    className="relative border rounded-lg overflow-hidden shadow-sm group"
-                  >
-                    <img
-                      src={URL.createObjectURL(img)}
-                      alt="preview"
-                      className="object-cover w-full h-28"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(i)}
-                      className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+
+            {serviceImages.length > 0 && (
+
+
+              serviceImages?.map((item, index) => {
+                return (
+
+                  <div key={index}>
+
+                    <div
+                      className="flex items-center gap-3 mt-3 bg-sky-100 p-2 rounded-lg relative"
                     >
-                      <X size={14} />
-                    </button>
+                      <img
+                        src={item?.base64}
+                        alt="Image"
+                        className="w-[60px] h-[60px] object-cover rounded-lg"
+                      />
+                      <span>{item?.name}</span>
+
+                      <div>
+                        <button
+                          onClick={() => { handleRemoveFile(index, serviceImages, setserviceImages) }}
+                          className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-600 text-white cursor-pointer"
+                        >
+                          <RxCross2 className="text-white text-lg" />
+                        </button>
+                      </div>
+                    </div>
+
                   </div>
-                ))}
-              </div>
+
+                )
+              })
             )}
+
+
+
+
+
+
           </div>
 
           {/* Submit Button */}
@@ -500,13 +591,13 @@ export default function AddServicePage() {
             <button
               onClick={(e) => { handleSubmit(e) }}
               disabled={loading}
-              className="bg-[var(--brandBg)] hover:bg-sky-600 text-white font-semibold py-3 px-12 rounded-full transition-all shadow-md"
+              className="bg-[var(--brandBg)] hover:bg-sky-600 text-white font-semibold py-3 px-12 rounded-full transition-all shadow-md cursor-pointer"
             >
               {loading ? "Submitting..." : "Add Service"}
             </button>
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 }

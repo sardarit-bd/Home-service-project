@@ -42,6 +42,38 @@ const providers = [
         reviews: 88,
         image: Electricals,
     },
+    {
+        id: 1,
+        name: "John’s Handyman Services",
+        category: "Handyman",
+        rating: 4.9,
+        reviews: 128,
+        image: handyman,
+    },
+    {
+        id: 2,
+        name: "GreenLeaf Landscaping",
+        category: "Landscaping",
+        rating: 4.8,
+        reviews: 97,
+        image: outdoor,
+    },
+    {
+        id: 3,
+        name: "AquaPro Plumbing",
+        category: "Plumbing",
+        rating: 5.0,
+        reviews: 156,
+        image: plumbing,
+    },
+    {
+        id: 4,
+        name: "SmartFix Electricals",
+        category: "Electrical",
+        rating: 4.7,
+        reviews: 88,
+        image: Electricals,
+    },
 ];
 
 export default function FeaturedProvidersSection() {
@@ -70,7 +102,7 @@ export default function FeaturedProvidersSection() {
                 <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">
                     {providers.map((provider, index) => (
                         <motion.div
-                            key={provider.id}
+                            key={index}
                             initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}

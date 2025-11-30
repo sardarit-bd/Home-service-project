@@ -67,6 +67,9 @@ export default function FeaturedProvidersSection() {
 
 
 
+    console.log(Services);
+    console.log(Areas);
+
 
     if (Loading) return <SkeletonList />
 
@@ -90,7 +93,7 @@ export default function FeaturedProvidersSection() {
                         <select value={area} onChange={(e) => setarea(e.target.value.toLowerCase())} className="px-1 md:px-5 w-full md:w-fit py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 focus:outline-none cursor-pointer capitalize outline-none">
 
                             {
-                                Areas.map((item, index) => {
+                                Areas?.map((item, index) => {
                                     return (
                                         <option className="capitalize" value={item?.areaName.toLowerCase()} key={index}>{item?.areaName?.toLowerCase()}</option>
                                     )
@@ -104,7 +107,7 @@ export default function FeaturedProvidersSection() {
 
                 {/* Providers Grid */}
                 <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">
-                    {Services.map((provider, index) => (
+                    {Services?.map((provider, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 40 }}
@@ -116,8 +119,8 @@ export default function FeaturedProvidersSection() {
                             {/* Image */}
                             <div className="relative h-52 overflow-hidden">
                                 <Image
-                                    src={provider.serviceImageUrls[0] ? provider.serviceImageUrls[0] : "/imagenotfound.png"}
-                                    alt={provider.name}
+                                    src={provider?.serviceImageUrls?.[0] ? provider?.serviceImageUrls?.[0] : "/imagenotfound.png"}
+                                    alt={provider?.name}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                                 />

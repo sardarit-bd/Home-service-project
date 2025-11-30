@@ -1,15 +1,15 @@
 "use client";
 import useLoadingStore from "@/store/useLoadingStore";
-import getId from "@/utilis/helper/cookie/getid";
 import getCookie from "@/utilis/helper/cookie/gettooken";
 import MakeGet from "@/utilis/requestrespose/get";
 import MakePut from "@/utilis/requestrespose/put";
+import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function ProfilePage() {
+export default function SingleUserPage() {
 
-    const id = getId();
+    const { id } = useParams();
     const token = getCookie();
     const { isLoading, setLoading } = useLoadingStore();
     const [fetchloading, setfetchloading] = useState(true);
@@ -24,6 +24,10 @@ export default function ProfilePage() {
     const [address, setaddress] = useState('');
     const [address2, setaddress2] = useState('');
     const [alldata, setalldata] = useState([]);
+    const [role, setrole] = useState('user');
+    const [isprofileupdated, setisprofileupdated] = useState(false);
+    const [maxcatagoryselection, setmaxcatagoryselection] = useState(10);
+    const [maxareaselection, setmaxareaselection] = useState(10);
 
 
 
@@ -40,6 +44,10 @@ export default function ProfilePage() {
             setzip(response?.data?.zipcode);
             setaddress(response?.data?.address);
             setaddress2(response?.data?.address2);
+            setrole(response?.data?.role);
+            setisprofileupdated(response?.data?.isUpdated);
+            setmaxcatagoryselection(response?.data?.maxCatagorySelect);
+            setmaxareaselection(response?.data?.maxAreaSelect);
             setalldata(response?.data);
 
             setfetchloading(false);
@@ -58,6 +66,17 @@ export default function ProfilePage() {
     }, [id, token, fetching]);
 
 
+
+
+
+    console.log(alldata);
+
+
+
+
+
+
+
     /************** handle profile update function here` ******************/
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -74,10 +93,11 @@ export default function ProfilePage() {
             zipcode: zip,
             address,
             address2,
-            isUpdated: true
+            role,
+            isUpdated: isprofileupdated,
+            maxCatagorySelect: maxcatagoryselection,
+            maxAreaSelect: maxareaselection,
         }
-
-        console.log(passdata);
 
         const response = await MakePut(`user/${id}`, passdata, token);
 
@@ -101,7 +121,7 @@ export default function ProfilePage() {
 
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                        Profile Information
+                        Single User Information
                     </h1>
                     <div>
                         {
@@ -189,6 +209,26 @@ export default function ProfilePage() {
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                 </div>
+
+
+                                {/* Role */}
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Role</label>
+                                    <select
+                                        name="isprofileupdated"
+                                        disabled={!isedit}
+                                        value={role}
+                                        onChange={(e) => { setrole(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    >
+                                        <option value="user">user</option>
+                                        <option value="provider">Service Provider</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+
+
+
                             </div>
 
                             {/* Address */}
@@ -243,6 +283,51 @@ export default function ProfilePage() {
                                 ></textarea>
                             </div>
 
+
+
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Is Profile Update</label>
+                                    <select
+                                        name="isprofileupdated"
+                                        disabled={!isedit}
+                                        value={isprofileupdated}
+                                        onChange={(e) => { setisprofileupdated(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    >
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                </div>
+
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Max Cetagory Selection</label>
+                                    <input
+                                        type="number"
+                                        name="maxcatagoryselection"
+                                        disabled={!isedit}
+                                        value={maxcatagoryselection && maxcatagoryselection != null ? maxcatagoryselection : ""}
+                                        onChange={(e) => { setmaxcatagoryselection(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Max Area Selection</label>
+                                    <input
+                                        type="number"
+                                        name="maxareaselection"
+                                        disabled={!isedit}
+                                        value={maxareaselection && maxareaselection != null ? maxareaselection : ""}
+                                        onChange={(e) => { setmaxareaselection(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
+                            </div>
+
+
+
+
                             {/* Update Button */}
                             <div className="w-full flex justify-end">
                                 <button
@@ -256,7 +341,7 @@ export default function ProfilePage() {
                                         </div>
                                     }
 
-                                    Update Profile
+                                    Update Update User Info
                                 </button>
                             </div>
                         </div>
