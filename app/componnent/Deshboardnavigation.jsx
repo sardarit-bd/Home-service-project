@@ -80,6 +80,17 @@ const DeshboardNavigation = ({ loginUser }) => {
     },
   ];
 
+
+  const userItems = [
+    {
+      name: "Profile",
+      nested: false,
+      sub: [],
+      link: "/deshboard/profile",
+    },
+  ];
+
+
   return (
     <div>
       {loginUser?.role == "admin" ? (
@@ -97,9 +108,24 @@ const DeshboardNavigation = ({ loginUser }) => {
             );
           })}
         </div>
-      ) : (
+      ) : loginUser?.role == "provider" ? (
         <div className="flex flex-col items-start lg:items-center gap-4 lg:gap-2 text-gray-500 mt-3 w-full">
           {providerItems?.map((item, index) => {
+            return (
+              <Link
+                key={index}
+                className={`font-semibold text-md text-nowrap py-3 px-2 rounded-md lg:px-4 lg:py-3 hover:bg-sky-100 w-full ${pathName === item?.link && "bg-sky-100"
+                  }`}
+                href={item?.link}
+              >
+                {item?.name}
+              </Link>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex flex-col items-start lg:items-center gap-4 lg:gap-2 text-gray-500 mt-3 w-full">
+          {userItems?.map((item, index) => {
             return (
               <Link
                 key={index}

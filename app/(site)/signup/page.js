@@ -12,7 +12,9 @@ import logingandsignupmakepost from "../../../utilis/requestrespose/logingandsig
 const SignUP = () => {
   const router = useRouter();
   const { isLoading, setLoading } = useLoadingStore();
-  const [name, setName] = useState("");
+  const [fname, setfName] = useState("");
+  const [mname, setmName] = useState("");
+  const [lname, setlName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
@@ -21,10 +23,12 @@ const SignUP = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (name && email && password && role) {
+    if (fname && lname && email && password && role) {
       setLoading(true);
       const response = await logingandsignupmakepost("register", {
-        name,
+        fname,
+        mname,
+        lname,
         email,
         role,
         password,
@@ -51,9 +55,23 @@ const SignUP = () => {
         <form onSubmit={handleSubmit} className="space-y-4 text-gray-600">
           <input
             type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="Frist Name * "
+            value={fname}
+            onChange={(e) => setfName(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none "
+          />
+          <input
+            type="text"
+            placeholder="Middle Name"
+            value={mname}
+            onChange={(e) => setmName(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none "
+          />
+          <input
+            type="text"
+            placeholder="Last Name * "
+            value={lname}
+            onChange={(e) => setlName(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none "
           />
           <input

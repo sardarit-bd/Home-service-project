@@ -1,11 +1,14 @@
 "use client";
 
 import DetailsPageSideImageWrper from "@/app/componnent/DetaillspageSideImageWrper";
+import Ratings from "@/app/componnent/Rating";
 import ReviewPopUp from "@/app/componnent/ReviewPopUp";
 import ProfileSkeleton from "@/app/componnent/skelaton/ProfileSkeleton";
+import SpinLoader from "@/app/componnent/SpingLoader";
+import getId from "@/utilis/helper/cookie/getid";
 import getCookie from "@/utilis/helper/cookie/gettooken";
 import { motion } from "framer-motion";
-import { CheckCircle, Mail, MapPin, Phone, Star } from "lucide-react";
+import { Mail, Phone, Star } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdOutlineNotificationImportant } from "react-icons/md";
@@ -19,8 +22,14 @@ export default function ServiceDetailsPage() {
 
     const token = getCookie();
     const [Loading, setLoading] = useState(false);
+    const [btnLoading, setbtnLoading] = useState(false);
     const [Service, setService] = useState([]);
     const { id } = useParams();
+    const [rating, setRating] = useState(0);
+    const userId = getId();
+    const [newReviewDes, setnewReviewDes] = useState('');
+
+
 
 
     const [reviews, setReviews] = useState([
@@ -37,8 +46,6 @@ export default function ServiceDetailsPage() {
             text: "Great value for money. Arrived on time and fixed multiple issues efficiently.",
         },
     ]);
-
-    const [newReview, setNewReview] = useState({ name: "", rating: 5, text: "" });
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -82,14 +89,71 @@ export default function ServiceDetailsPage() {
     }, [id]);
 
 
+
+
     console.log(Service);
 
 
 
 
+    /*************************** Create Review function is here **********************************/
+    const CreateReview = async (e) => {
+
+        e.preventDefault();
+
+        const reviewData = {
+            productId: Service?._id,
+            userId: userId,
+            reviewDescription: newReviewDes,
+            reviewStar: rating
+        }
+
+        try {
+            if (newReviewDes && rating > 0 && token) {
+                setbtnLoading(true);
+
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/createreview`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify(reviewData),
+                    }
+                );
+
+                const data = await res.json();
+
+                if (data.success) {
+                    toast.success("Review submitted successfully!");
+                    setnewReviewDes('');
+                    setRating(0);
+                    setTimeout(() => {
+                        fetchService();
+                    }, 1000);
+                } else {
+                    toast.error("Failed to submit review.");
+                }
+            } else {
+                toast.error("Please provide review description and rating, and ensure you are logged in.");
+            }
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            toast.error("Network or server error while submitting review.");
+        } finally {
+            setbtnLoading(false);
+        }
+
+    }
+
+
+
+
+
+
     if (Loading) return <ProfileSkeleton />
-
-
 
 
     return (
@@ -111,7 +175,7 @@ export default function ServiceDetailsPage() {
                             {Array.from({ length: 5 }).map((_, i) => (
                                 <Star
                                     key={i}
-                                    size={18}
+                                    size={22}
                                     fill={i < Math.round(Service?.reviews?.analytics?.average) ? "currentColor" : "none"}
                                     strokeWidth={1.5}
                                 />
@@ -119,7 +183,7 @@ export default function ServiceDetailsPage() {
                             <span className="text-gray-600 ml-2 text-sm">{Service?.reviews?.total} Reviews</span>
                         </div>
                         <p className="text-gray-700 max-w-2xl leading-relaxed">
-                            Reliable, experienced, and affordable handyman services across Chicago — handling everything from minor repairs to full home maintenance.
+                            {Service?.description}
                         </p>
 
 
@@ -147,6 +211,7 @@ export default function ServiceDetailsPage() {
                                     <span className="ml-2 p-1 rounded-lg border border-red-300 text-gray-900 text-xs bg-red-100 flex items-center gap-1">
                                         <MdOutlineNotificationImportant className="text-lg" />
                                         Please log in to view contact details
+
                                     </span>
                                 )
                             }
@@ -154,47 +219,13 @@ export default function ServiceDetailsPage() {
                         <div className={`grid sm:grid-cols-2 gap-3 text-gray-700 ${!token && "blurred-text"}`}>
                             <p className="flex items-center gap-2">
                                 <Phone size={18} className="text-[var(--brandColor)]" />
-                                +1 (312) 555-1234
+                                {Service?.phone}
                             </p>
                             <p className="flex items-center gap-2">
                                 <Mail size={18} className="text-[var(--brandColor)]" />
-                                fixright@homeserviceschi.com
-                            </p>
-                            <p className="flex items-center gap-2 sm:col-span-2">
-                                <MapPin size={18} className="text-[var(--brandColor)]" />
-                                Chicago, IL 60616
+                                {Service?.email}
                             </p>
                         </div>
-                    </motion.div>
-
-                    {/* OFFERINGS */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="bg-white p-6 rounded-[var(--radius-card)] shadow-md hover:shadow-lg transition"
-                    >
-                        <h2 className="text-xl font-semibold mb-5 text-[var(--brandColor)] border-b pb-2 border-gray-200">
-                            Services Offered
-                        </h2>
-                        <ul className="grid sm:grid-cols-2 gap-3 text-gray-700">
-                            {[
-                                "Carpentry & Furniture Repair",
-                                "Door, Window & Drywall Installation",
-                                "Electrical & Plumbing Maintenance",
-                                "Interior & Exterior Painting",
-                                "Appliance Setup & TV Mounting",
-                            ].map((item, i) => (
-                                <li key={i} className="flex items-center gap-2">
-                                    <CheckCircle
-                                        size={18}
-                                        className="text-[var(--brandColor)] flex-shrink-0"
-                                    />
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
                     </motion.div>
 
                     {/* REVIEWS */}
@@ -221,37 +252,37 @@ export default function ServiceDetailsPage() {
 
                         {/* Existing Reviews */}
                         <div className={`space-y-6 mb-10 relative ${!token && "blurred-text"}`}>
-                            {reviews.map((r) => (
+                            {Service?.reviews?.reviewsDetails?.map((r) => (
                                 <div
                                     key={r.id}
                                     className="p-4 bg-gray-50 rounded-lg border border-gray-100"
                                 >
                                     <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-semibold text-gray-900">{r.name}</h4>
-                                        <div className="flex text-yellow-500">
+                                        <h4 className="font-semibold text-gray-900">{r?.user?.fname + " " + r?.user?.mname + " " + r?.user?.lname}</h4>
+                                        <div className="flex gap-.5 text-yellow-500">
                                             {Array.from({ length: 5 }).map((_, i) => (
                                                 <Star
                                                     key={i}
-                                                    size={14}
-                                                    fill={i < r.rating ? "currentColor" : "none"}
+                                                    size={19}
+                                                    fill={i < r?.reviewStar ? "currentColor" : "none"}
                                                     strokeWidth={1.5}
                                                 />
                                             ))}
                                         </div>
                                     </div>
-                                    <p className="text-gray-700 text-sm leading-relaxed">{r.text}</p>
+                                    <p className="text-gray-700 text-sm leading-relaxed">{r?.reviewDescription}</p>
                                 </div>
                             ))}
 
                         </div>
 
                         {/* Add Review */}
-                        <form onSubmit={handleSubmit} className="border-t pt-6">
+                        <div className="border-t pt-6">
                             <h3 className="font-semibold text-gray-900 mb-4 text-lg">
-                                Write a Review
+                                Write a Review <span className="bg-red-100 border-2 border-red-200 rounded-md ml-2 px-1 text-sm">Min:10 And Max:500 characters </span>
                             </h3>
                             <div className="grid gap-3 mb-4">
-                                <input
+                                {/* <input
                                     type="text"
                                     placeholder="Your Name"
                                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
@@ -259,54 +290,41 @@ export default function ServiceDetailsPage() {
                                     onChange={(e) =>
                                         setNewReview({ ...newReview, name: e.target.value })
                                     }
-                                />
+                                /> */}
                                 <textarea
                                     rows="4"
                                     placeholder="Your Review..."
                                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
-                                    value={newReview.text}
+                                    value={newReviewDes}
                                     onChange={(e) =>
-                                        setNewReview({ ...newReview, text: e.target.value })
+                                        setnewReviewDes(e.target.value)
                                     }
                                 ></textarea>
                                 <div className="flex items-center gap-2">
-                                    <label className="text-sm font-medium text-gray-700">
+                                    <label className="text-lg font-bold text-gray-700">
                                         Rating:
                                     </label>
-                                    <select
-                                        className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
-                                        value={newReview.rating}
-                                        onChange={(e) =>
-                                            setNewReview({
-                                                ...newReview,
-                                                rating: parseInt(e.target.value),
-                                            })
-                                        }
-                                    >
-                                        {[5, 4, 3, 2, 1].map((num) => (
-                                            <option key={num} value={num}>
-                                                {num} Stars
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <Ratings rating={rating} setRating={setRating} />
                                 </div>
                             </div>
 
                             <button
-                                type="submit"
-                                className="px-6 py-2 bg-[var(--brandBg)] text-white font-semibold rounded-md hover:opacity-90 transition"
+                                onClick={(e) => { CreateReview(e) }}
+                                className="px-6 py-2 bg-[var(--brandBg)] text-white font-semibold rounded-md hover:opacity-90 transition cursor-pointer mt-6 flex items-center gap-4"
                             >
+
+                                {btnLoading && <SpinLoader />}
                                 Submit Review
                             </button>
-                        </form>
+                        </div>
                     </motion.div>
                 </div>
 
                 {/* RIGHT: STICKY IMAGE CARD */}
-                <DetailsPageSideImageWrper serviceImageUrls={Service?.serviceImageUrls} />
+                <DetailsPageSideImageWrper serviceImageUrls={Service?.serviceImages} />
 
                 <ToastContainer />
-            </div>
-        </section>
+            </div >
+        </section >
     );
 }

@@ -27,7 +27,7 @@ const ReviewPopUp = ({ Reviews }) => {
                         />
                     ))}
                 </div>
-                <p className="text-gray-800 font-semibold text-lg">{Reviews?.analytics?.average} out of 5</p>
+                <p className="text-gray-800 font-semibold text-lg">{Math.round(Reviews?.analytics?.average)} out of 5</p>
             </div>
 
             {/* Rating Bars */}

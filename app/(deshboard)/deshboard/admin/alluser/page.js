@@ -2,6 +2,7 @@
 
 import getCookie from "@/utilis/helper/cookie/gettooken";
 import { Loader2, Search, Shield, Users } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -112,8 +113,11 @@ export default function UserListPage() {
                   <th className="py-3 px-4">Name</th>
                   <th className="py-3 px-4">Email</th>
                   <th className="py-3 px-4 text-center">Role</th>
-                  <th className="py-3 px-4 text-right rounded-tr-lg">
+                  <th className="py-3 px-4 text-center">
                     Created
+                  </th>
+                  <th className="py-3 px-4 text-right rounded-tr-lg">
+                    Action
                   </th>
                 </tr>
               </thead>
@@ -127,16 +131,15 @@ export default function UserListPage() {
                       {index + 1}
                     </td>
                     <td className="py-3 px-4 font-medium text-gray-800">
-                      {user.name}
+                      {user.fname} {user.mname} {user.lname}
                     </td>
                     <td className="py-3 px-4 text-gray-600">{user.email}</td>
                     <td className="py-3 px-4 text-center">
                       <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${
-                          user.role === "admin"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-blue-100 text-blue-700"
-                        }`}
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${user.role === "admin"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-blue-100 text-blue-700"
+                          }`}
                       >
                         <Shield size={14} />
                         {user.role}
@@ -144,6 +147,11 @@ export default function UserListPage() {
                     </td>
                     <td className="py-3 px-4 text-right text-sm text-gray-500">
                       {new Date(user.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="py-3 px-4 text-right text-sm text-gray-500">
+                      <Link href={`/deshboard/admin/alluser/${user._id}`} className="text-[var(--brandColor)] hover:underline">
+                        View All Data
+                      </Link>
                     </td>
                   </tr>
                 ))}
@@ -162,11 +170,10 @@ export default function UserListPage() {
                       {user.name}
                     </h3>
                     <span
-                      className={`text-xs px-3 py-1 rounded-full ${
-                        user.role === "admin"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-blue-100 text-blue-700"
-                      }`}
+                      className={`text-xs px-3 py-1 rounded-full ${user.role === "admin"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-blue-100 text-blue-700"
+                        }`}
                     >
                       {user.role}
                     </span>

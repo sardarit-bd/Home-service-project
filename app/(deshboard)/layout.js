@@ -55,9 +55,8 @@ const Deshboardlayout = ({ children }) => {
       )}
       <div className="">
         <div
-          className={`fixed bg-white border-r border-gray-200 w-[250px] h-screen px-3 py-4 ${
-            isSideberOpen ? "block lg:block" : "hidden lg:block"
-          }`}
+          className={`fixed bg-white border-r border-gray-200 w-[250px] h-screen px-3 py-4 ${isSideberOpen ? "block lg:block" : "hidden lg:block"
+            }`}
         >
           <div
             onClick={() => {

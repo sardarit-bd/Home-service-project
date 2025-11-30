@@ -28,12 +28,21 @@ const Signin = () => {
             const response = await logingandsignupmakepost("login", { email, password });
 
             if (response) {
+
+                console.log(response);
+
                 setCookie("token", response?.data?.token, 1);
                 setCookie("id", response?.data?._id, 1);
-                setCookie("name", response?.data?.name, 1);
+                setCookie("fname", response?.data?.fname, 1);
+                setCookie("mname", response?.data?.mname, 1);
+                setCookie("name", response?.data?.lname, 1);
                 setCookie("role", response?.data?.role, 1);
                 setLoginUser({
-                    name: response?.data?.name,
+                    fname: response?.data?.fname,
+                    mname: response?.data?.mname,
+                    lname: response?.data?.lname,
+                    email: response?.data?.email,
+                    _id: response?.data?._id,
                     token: response?.data?.token,
                     role: response?.data?.role
                 });

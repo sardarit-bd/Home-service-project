@@ -83,7 +83,7 @@ export default function FeaturedProvidersSection() {
 
 
 
-    console.log(filteredServices);
+    console.log(Services);
 
 
     // handyman
@@ -139,8 +139,8 @@ export default function FeaturedProvidersSection() {
                             {/* Image */}
                             <div className="relative h-52 overflow-hidden">
                                 <Image
-                                    src={provider.serviceImageUrls[0] ? provider.serviceImageUrls[0] : "/imagenotfound.png"}
-                                    alt={provider.name}
+                                    src={provider?.serviceImages?.[0] ? provider?.serviceImages?.[0] : "/imagenotfound.png"}
+                                    alt={provider?.name}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                                 />
