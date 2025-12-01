@@ -163,13 +163,13 @@ export default function FeaturedProvidersSection() {
                                     {provider.name}
                                 </h3>
                                 <p className="text-sm text-gray-600 mb-3">
-                                    {provider.category}
+                                    {provider.selectedCategories}
                                 </p>
-                                <div className="flex items-center gap-1 text-[var(--brandColor)] mb-3">
+                                <div className="flex items-center gap-1 text-yellow-500 mb-3">
                                     {Array.from({ length: 5 }).map((_, i) => (
                                         <Star
                                             key={i}
-                                            size={16}
+                                            size={18}
                                             fill={i < Math.round(provider?.reviews?.analytics?.average) ? "currentColor" : "none"}
                                             strokeWidth={1.5}
                                         />
