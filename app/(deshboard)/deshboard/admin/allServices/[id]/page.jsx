@@ -1,9 +1,12 @@
 "use client";
 
 import getCookie from "@/utilis/helper/cookie/gettooken";
+import FileExtension from "@/utilis/helper/fileExtension";
 import { ArrowLeft, CheckCircle, Loader2, Trash2, XCircle } from "lucide-react";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { IoMdDownload } from "react-icons/io";
 import { toast } from "react-toastify";
 
 export default function ServiceDetailsPage() {
@@ -58,7 +61,7 @@ export default function ServiceDetailsPage() {
       const data = await res.json();
       if (data.success) {
         toast.success(
-          `✅ Service ${status === "published" ? "approved" : "rejected"} successfully`
+          `✅ Service ${status === "approved" ? "Approved" : "Pending"} successfully`
         );
         router.push("/deshboard/admin/allServices");
       } else toast.error("❌ Failed to update service status.");
@@ -93,6 +96,17 @@ export default function ServiceDetailsPage() {
     }
   };
 
+
+
+
+
+  console.log(service);
+
+
+
+
+
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-[80vh]">
@@ -117,37 +131,73 @@ export default function ServiceDetailsPage() {
           >
             <ArrowLeft size={18} /> Back
           </button>
-          <span
-            className={`px-4 py-1 text-sm font-semibold rounded-full ${
-              service.status === "published"
-                ? "bg-green-100 text-green-700"
-                : "bg-yellow-100 text-yellow-700"
-            }`}
-          >
-            {service.status}
-          </span>
+          {/* Action Buttons */}
+          <div className="flex gap-4 items-center">
+            <span><strong>Current Status:</strong> {service.status} </span>
+            {service.status !== "published" ? (
+              <>
+                <button
+                  onClick={() => handleStatusUpdate("approved")}
+                  disabled={updating}
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-semibold transition"
+                >
+                  {updating ? (
+                    <Loader2 className="animate-spin" size={16} />
+                  ) : (
+                    <CheckCircle size={18} />
+                  )}
+                  Approve
+                </button>
+
+                <button
+                  onClick={() => handleStatusUpdate("pending")}
+                  disabled={updating}
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-semibold transition"
+                >
+                  {updating ? (
+                    <Loader2 className="animate-spin" size={16} />
+                  ) : (
+                    <XCircle size={18} />
+                  )}
+                  Pending
+                </button>
+
+
+                <button
+                  onClick={() => handleDelete()}
+                  disabled={updating}
+                  className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-semibold transition"
+                >
+                  {updating ? (
+                    <Loader2 className="animate-spin" size={16} />
+                  ) : (
+                    <XCircle size={18} />
+                  )}
+                  Rejected
+                </button>
+
+
+              </>
+            ) : (
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-semibold transition"
+              >
+                {deleting ? (
+                  <Loader2 className="animate-spin" size={16} />
+                ) : (
+                  <Trash2 size={18} />
+                )}
+                Delete
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Content */}
         <div className="p-6 grid md:grid-cols-2 gap-8">
-          {/* Left - Images */}
-          <div>
-            <img
-              src={service.serviceImageUrls?.[0] || service.license}
-              alt={service.name}
-              className="rounded-lg shadow-sm mb-4"
-            />
-            <div className="grid grid-cols-3 gap-3">
-              {service.serviceImageUrls?.slice(1).map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt="gallery"
-                  className="h-24 w-full object-cover rounded-md border"
-                />
-              ))}
-            </div>
-          </div>
+
 
           {/* Right - Details */}
           <div>
@@ -160,19 +210,56 @@ export default function ServiceDetailsPage() {
 
             <div className="space-y-2 text-sm">
               <p>
-                <strong>Category:</strong> {service.category}
+                <strong>Email:</strong> {service.email}
               </p>
               <p>
-                <strong>Subcategory:</strong> {service.subcategory}
+                <strong>Phone:</strong> {service.phone}
               </p>
               <p>
-                <strong>Price:</strong> ${service.price}
+                <strong>Experience:</strong> {service.experience}
+              </p>
+
+              <p>
+                <strong>Category:</strong> {service.selectedCategories}
               </p>
               <p>
-                <strong>Discount:</strong> {service.discount}%
+                <strong>Subcategory:</strong> <span className="flex gap-3">
+                  {service.selectedSubcategories?.map((item, index) => {
+                    return <span key={index} className="text-gray-600 text-sm px-3 py-1 rounded-md mb-4 bg-sky-100">{item}</span>
+                  })}
+                </span>
+              </p>
+
+              <p>
+                <strong>Metropoliton:</strong> {service.selectedAreas}
               </p>
               <p>
-                <strong>About:</strong> {service.about}
+                <strong>Areas:</strong> <span className="flex gap-3">
+                  {service.selectedSubareas?.map((item, index) => {
+                    return <span key={index} className="text-gray-600 text-sm px-3 py-1 rounded-md mb-4 bg-sky-100">{item}</span>
+                  })}
+                </span>
+              </p>
+
+              <p>
+                <strong>Reviews:</strong> <span className="flex">
+                  <div className="flex flex-col mt-2">
+                    <span className="text-gray-600 text-sm px-3 py-1 rounded-md mb-4 bg-sky-100">
+                      <strong>Average:</strong> {Math.round(service.reviews?.analytics?.average)}
+                    </span>
+                    <span className="text-gray-600 text-sm px-3 py-1 rounded-md mb-4 bg-sky-100">
+                      <strong>Total:</strong> {service.reviews?.total}
+                    </span>
+                  </div>
+                </span>
+              </p>
+
+
+              <p>
+                <strong>Promotional Discount:</strong> {service.promotiondis}
+              </p>
+              <p>
+                <strong>Promotional Discount Period:</strong> {service.promotionalpriod}
               </p>
               <p>
                 <strong>Areas:</strong>{" "}
@@ -182,78 +269,153 @@ export default function ServiceDetailsPage() {
                 <strong>Categories:</strong>{" "}
                 {service.categories?.join(", ") || "Not specified"}
               </p>
+              <p className="">
+                <strong>Added on:</strong>{" "}
+                {new Date(service.createdAt).toLocaleDateString()}
+              </p>
             </div>
 
             {/* License & Insurance */}
-            <div className="mt-5 grid grid-cols-2 gap-4">
+            <div className="mt-5">
               <div>
-                <p className="text-xs text-gray-500 mb-1 font-semibold">
+                <p className="text-md text-gray-900 mb-1 font-semibold">
                   License
                 </p>
-                <img
-                  src={service.license}
-                  alt="License"
-                  className="h-32 w-full object-cover rounded-md border"
-                />
+                <div className="flex items-center gap-2">
+                  {
+                    service?.license?.map((item, index) => {
+                      const ext = FileExtension(item);
+
+                      if (ext !== "pdf") {
+                        return (
+                          <div key={index} className="relative">
+                            <Image
+                              width={1000}
+                              height={1000}
+                              src={item}
+                              alt="gallery"
+                              className="h-full w-full object-cover rounded-md border"
+                            />
+                            {/* Download Button */}
+                            <a
+                              href={item}
+                              target="_blank"
+                              download
+                              className="bg-red-800 text-white px-2 py-2 rounded-md text-sm absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+                            >
+                              <IoMdDownload />
+                            </a>
+                          </div>
+                        );
+                      }
+
+                      // If PDF
+                      return (
+                        <div
+                          key={index}
+                          className="bg-red-800 text-white px-4 py-4 rounded-md flex flex-col items-center justify-between gap-3 w-full h-full"
+                        >
+                          <span>PDF</span>
+
+                          {/* Download Button */}
+                          <a
+                            href={item}
+                            target="_blank"
+                            download
+                            className="bg-white text-red-800 px-2 py-1 rounded-md text-sm"
+                          >
+                            Download
+                          </a>
+                        </div>
+                      );
+                    })
+                  }
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-gray-500 mb-1 font-semibold">
+              <div className="mt-10">
+                <p className="text-md text-gray-900 mb-1 font-semibold">
                   Insurance
                 </p>
-                <img
-                  src={service.insurance}
-                  alt="Insurance"
-                  className="h-32 w-full object-cover rounded-md border"
-                />
+                <div className="flex items-center gap-2">
+                  {
+                    service?.insurance?.map((item, index) => {
+                      const ext = FileExtension(item);
+
+                      if (ext !== "pdf") {
+                        return (
+                          <div key={index} className="relative">
+                            <Image
+                              width={1000}
+                              height={1000}
+                              src={item}
+                              alt="gallery"
+                              className="h-full w-full object-cover rounded-md border"
+                            />
+                            {/* Download Button */}
+                            <a
+                              href={item}
+                              target="_blank"
+                              download
+                              className="bg-red-800 text-white px-2 py-2 rounded-md text-sm absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+                            >
+                              <IoMdDownload />
+                            </a>
+                          </div>
+                        );
+                      }
+
+                      // If PDF
+                      return (
+                        <div
+                          key={index}
+                          className="bg-red-800 text-white px-4 py-4 rounded-md flex flex-col items-center justify-between gap-3 w-full h-full"
+                        >
+                          <span>PDF</span>
+
+                          {/* Download Button */}
+                          <a
+                            href={item}
+                            target="_blank"
+                            download
+                            className="bg-white text-red-800 px-2 py-1 rounded-md text-sm"
+                          >
+                            Download
+                          </a>
+                        </div>
+                      );
+                    })
+                  }
+                </div>
               </div>
             </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-4 mt-8">
-              {service.status !== "published" ? (
-                <>
-                  <button
-                    onClick={() => handleStatusUpdate("published")}
-                    disabled={updating}
-                    className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-semibold transition"
-                  >
-                    {updating ? (
-                      <Loader2 className="animate-spin" size={16} />
-                    ) : (
-                      <CheckCircle size={18} />
-                    )}
-                    Approve
-                  </button>
-
-                  <button
-                    onClick={() => handleStatusUpdate("rejected")}
-                    disabled={updating}
-                    className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-semibold transition"
-                  >
-                    {updating ? (
-                      <Loader2 className="animate-spin" size={16} />
-                    ) : (
-                      <XCircle size={18} />
-                    )}
-                    Reject
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-semibold transition"
-                >
-                  {deleting ? (
-                    <Loader2 className="animate-spin" size={16} />
-                  ) : (
-                    <Trash2 size={18} />
-                  )}
-                  Delete
-                </button>
-              )}
-            </div>
           </div>
+
+
+
+          {/* Left - Images */}
+          <div>
+            {
+              service?.serviceImages?.map((item, index) => {
+                return (
+                  <div key={index} className="grid grid-cols-3 gap-6">
+                    <Image
+                      key={index}
+                      width={1000}
+                      height={1000}
+                      src={item}
+                      alt="gallery"
+                      className="h-full w-full object-cover rounded-md border"
+                    />
+                  </div>
+                )
+              })
+            }
+
+          </div>
+
+
+
+
         </div>
       </div>
     </section>

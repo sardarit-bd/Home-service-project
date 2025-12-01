@@ -92,7 +92,7 @@ const HeroSearchBar = () => {
         e.preventDefault();
         const form = e.target;
 
-        router.push(`/services/${services}`);
+        router.push(`/services/${services.toLowerCase()}`);
     };
 
 
@@ -152,7 +152,7 @@ const HeroSearchBar = () => {
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className="bg-[var(--brandColor,#00a6f4)] text-white px-6 py-2 rounded-full font-semibold hover:opacity-90 transition-all"
+                    className="bg-[var(--brandColor,#00a6f4)] text-white px-6 py-2 rounded-full font-semibold hover:opacity-90 transition-all cursor-pointer"
                 >
                     Search
                 </button>
