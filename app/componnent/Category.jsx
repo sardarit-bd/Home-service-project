@@ -4,10 +4,19 @@ import { motion } from "framer-motion";
 import { Bolt, DoorOpen, Droplets, Hammer, Home, House, Leaf, Paintbrush, SprayCan, Square, Wind, Wrench } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import Cleaning from "../../public/Cleaning.jpg";
+import Concrete from "../../public/Concrete.jpg";
 import Electricals from "../../public/Electricals.jpg";
 import handyman from "../../public/handyman.jpeg";
+import HVAC from "../../public/HVAC.jpg";
+import other_services from "../../public/other_services.jpg";
 import Landscaping from "../../public/outdoor.jpg";
+import PaintingFlooring from "../../public/Painting&Flooring.jpg";
 import plumbing from "../../public/plumbing.jpg";
+import Remodeling from "../../public/Remodeling.webp";
+import Roofing from "../../public/Roofing.jpg";
+import WindowsDoors from "../../public/Windows&Doors.jpg";
+
 
 const services = [
     {
@@ -48,7 +57,7 @@ const services = [
             "From kitchen makeovers to full home renovations, our remodeling experts create modern, functional living spaces tailored to your lifestyle.",
         icon: <Home size={36} />,
         link: "/services/remodeling",
-        image: handyman,
+        image: Remodeling,
     },
     {
         title: "Roofing",
@@ -56,7 +65,7 @@ const services = [
             "Professional roofing repair, installation, leak fixing, shingle replacement, and long-lasting weather protection for your home.",
         icon: <House size={36} />,
         link: "/services/roofing",
-        image: handyman,
+        image: Roofing,
     },
     {
         title: "Painting & Flooring",
@@ -64,7 +73,7 @@ const services = [
             "Interior & exterior painting, hardwood installation, tile work, refinishing, and all types of flooring upgrades done with precision.",
         icon: <Paintbrush size={36} />,
         link: "/services/painting-flooring",
-        image: handyman,
+        image: PaintingFlooring,
     },
     {
         title: "Cleaning Services",
@@ -72,7 +81,7 @@ const services = [
             "Top-rated home and business cleaning, deep cleaning, move-in/move-out services, and scheduled maintenance for spotless spaces.",
         icon: <SprayCan size={36} />,
         link: "/services/cleaning",
-        image: handyman,
+        image: Cleaning,
     },
     {
         title: "HVAC",
@@ -80,7 +89,7 @@ const services = [
             "Heating, cooling, furnace repair, AC installation, and indoor air quality services by trained HVAC specialists.",
         icon: <Wind size={36} />,
         link: "/services/hvac",
-        image: handyman,
+        image: HVAC,
     },
     {
         title: "Windows & Doors",
@@ -88,7 +97,7 @@ const services = [
             "Replace, repair, or upgrade your windows and doors with professional installation for better security, style, and energy efficiency.",
         icon: <DoorOpen size={36} />,
         link: "/services/windows-doors",
-        image: handyman,
+        image: WindowsDoors,
     },
     {
         title: "Concrete Services",
@@ -96,7 +105,7 @@ const services = [
             "Driveways, sidewalks, patios, foundation repair, and decorative concrete work designed to last for years.",
         icon: <Square size={36} />,
         link: "/services/concrete",
-        image: handyman,
+        image: Concrete,
     },
     {
         title: "Other Home Services",
@@ -104,7 +113,7 @@ const services = [
             "Can’t find what you need? We offer hundreds of additional home services from certified and trusted Chicago professionals.",
         icon: <Hammer size={36} />,
         link: "/services/others",
-        image: handyman,
+        image: other_services,
     },
 ];
 

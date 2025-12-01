@@ -2,6 +2,7 @@
 
 import SkeletonList from "@/app/componnent/skelaton/SkeletonList";
 import useSearchStore from "@/store/useSearchStore";
+import getLastTwoArray from "@/utilis/helper/getLastTwoArray";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import Image from "next/image";
@@ -23,7 +24,7 @@ export default function FeaturedProvidersSection() {
     const [Areas, setAreas] = useState([]);
     const [Services, setServices] = useState([]);
     const [Loading, setLoading] = useState(false);
-    const { services, area, setarea } = useSearchStore();
+    const { services, setservices, area, setarea } = useSearchStore();
 
 
 
@@ -63,12 +64,38 @@ export default function FeaturedProvidersSection() {
     useEffect(() => {
         fetchAreas();
         fetchServices();
+        const result = getLastTwoArray(pathName);
+        setservices(result[1]);
     }, []);
 
 
 
+
+
     console.log(Services);
-    console.log(Areas);
+
+
+
+    //filter services here
+    const filteredServices = Services?.filter((sr) => {
+        const DataSerivesCatagory = sr?.selectedCategories?.toLowerCase();
+        const searchSerivesCatagory = services?.toLowerCase();
+        return DataSerivesCatagory === searchSerivesCatagory;
+    });
+
+
+    const finalfilteredServicesandArea = filteredServices?.filter((sr) => {
+        const DataSerivesArea = sr?.selectedAreas?.toLowerCase();
+        const searchSerivesArea = area?.toLowerCase();
+        return DataSerivesArea === searchSerivesArea;
+    });
+
+
+
+    console.log(finalfilteredServicesandArea);
+
+
+
 
 
     if (Loading) return <SkeletonList />
@@ -107,7 +134,10 @@ export default function FeaturedProvidersSection() {
 
                 {/* Providers Grid */}
                 <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">
-                    {Services?.map((provider, index) => (
+
+                    {finalfilteredServicesandArea?.length < 1 ? <span className=" h-[40vh] pl-6 text-center text-2xl">No Data Found</span> : ""}
+
+                    {finalfilteredServicesandArea?.map((provider, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 40 }}
@@ -119,7 +149,7 @@ export default function FeaturedProvidersSection() {
                             {/* Image */}
                             <div className="relative h-52 overflow-hidden">
                                 <Image
-                                    src={provider?.serviceImageUrls?.[0] ? provider?.serviceImageUrls?.[0] : "/imagenotfound.png"}
+                                    src={provider?.serviceImages?.[0] ? provider?.serviceImages?.[0] : "/imagenotfound.png"}
                                     alt={provider?.name}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-500"

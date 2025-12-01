@@ -2,16 +2,23 @@
 
 import AreaSelector from "@/app/componnent/AreaSelector";
 import Loading from "@/app/componnent/Loading";
+import getId from "@/utilis/helper/cookie/getid";
 import getCookie from "@/utilis/helper/cookie/gettooken";
 import handleFiles from "@/utilis/helper/handleFiles";
 import { UploadCloud } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { toast } from "react-toastify";
 import CategorySelector from "../../../../componnent/CategorySelector";
 
 export default function AddServicePage() {
+
+
+  const router = useRouter();
+
   const token = getCookie();
+  const userID = getId();
   const [loading, setLoading] = useState(false);
   //   Handyman: [
   //     "Carpentry",
@@ -156,6 +163,7 @@ export default function AddServicePage() {
       license: license,
       insurance: insurance,
       serviceImages: serviceImages,
+      userID: userID
     };
 
 
@@ -175,12 +183,17 @@ export default function AddServicePage() {
       );
 
       const data = await res.json();
-      console.log(data);
+
 
       if (!res.ok) {
         toast.error("⚠️ Request failed");
       } else {
         toast.success("Product created!");
+
+        setTimeout(() => {
+          router.push("/deshboard/provider/myservices");
+        }, 1000);
+
       }
 
     } catch (err) {

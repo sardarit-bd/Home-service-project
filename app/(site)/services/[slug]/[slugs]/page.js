@@ -2,7 +2,6 @@
 
 import SkeletonList from "@/app/componnent/skelaton/SkeletonList";
 import useSearchStore from "@/store/useSearchStore";
-import filterServices from "@/utilis/helper/filterServices";
 import getLastTwoArray from "@/utilis/helper/getLastTwoArray";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
@@ -76,7 +75,18 @@ export default function FeaturedProvidersSection() {
 
 
     //filter services here
-    const filteredServices = filterServices(Services, { area, category: services, sub: subservices });
+    const filteredServices = Services?.filter((sr) => {
+        const DataSerivesCatagory = sr?.selectedCategories?.toLowerCase();
+        const searchSerivesCatagory = services?.toLowerCase();
+        return DataSerivesCatagory === searchSerivesCatagory;
+    });
+
+
+    const finalfilteredServicesandArea = filteredServices?.filter((sr) => {
+        const DataSerivesArea = sr?.selectedAreas?.toLowerCase();
+        const searchSerivesArea = area?.toLowerCase();
+        return DataSerivesArea === searchSerivesArea;
+    });
 
 
 
@@ -84,6 +94,7 @@ export default function FeaturedProvidersSection() {
 
 
     console.log(Services);
+    console.log(finalfilteredServicesandArea?.length < 1 ? "No Data Found" : "Data Found");
 
 
     // handyman
@@ -127,7 +138,10 @@ export default function FeaturedProvidersSection() {
 
                 {/* Providers Grid */}
                 <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">
-                    {Services.map((provider, index) => (
+
+                    {finalfilteredServicesandArea?.length < 1 ? <span className=" h-[40vh] pl-6 text-center text-2xl">No Data Found</span> : ""}
+
+                    {finalfilteredServicesandArea?.map((provider, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 40 }}

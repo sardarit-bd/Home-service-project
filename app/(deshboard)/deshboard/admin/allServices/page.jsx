@@ -33,6 +33,9 @@ export default function AllServicesPage() {
     fetchServices();
   }, []);
 
+
+
+
   return (
     <section className="">
       <div className="mx-auto">
@@ -58,16 +61,15 @@ export default function AllServicesPage() {
               >
                 <div className="relative h-44 w-full">
                   <img
-                    src={srv.serviceImageUrls?.[0] || srv.license}
+                    src={srv.serviceImages?.[0] || srv.license}
                     alt={srv.name}
                     className="object-cover w-full h-full rounded-t-2xl"
                   />
                   <span
-                    className={`absolute top-3 right-3 text-xs px-3 py-1 rounded-full font-semibold ${
-                      srv.status === "published"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
+                    className={`absolute top-3 right-3 text-xs px-3 py-1 rounded-full font-semibold ${srv.status === "published"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-yellow-100 text-yellow-700"
+                      }`}
                   >
                     {srv.status}
                   </span>
@@ -93,12 +95,6 @@ export default function AllServicesPage() {
                   </div>
 
                   <div className="mt-auto">
-                    <p className="font-bold text-[var(--brandColor)] text-sm">
-                      ${srv.price}{" "}
-                      <span className="text-gray-400 text-xs">
-                        (-{srv.discount || 0}%)
-                      </span>
-                    </p>
                     <p className="text-xs text-gray-400">
                       Added: {new Date(srv.createdAt).toLocaleDateString()}
                     </p>
