@@ -189,11 +189,35 @@ export default function ProfilePage() {
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                 </div>
+
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Address</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        disabled={!isedit}
+                                        value={address && address != null ? address : ""}
+                                        onChange={(e) => { setaddress(e.target.value) }}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
                             </div>
 
                             {/* Address */}
 
                             <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+
+                                <div className="w-full">
+                                    <label className="block text-gray-700 mb-1">Address Two</label>
+                                    <input
+                                        name="address"
+                                        value={address2 && address2 != null ? address2 : ""}
+                                        disabled={!isedit}
+                                        onChange={(e) => { setaddress2(e.target.value) }}
+                                        rows="6"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                </div>
                                 <div className="w-full">
                                     <label className="block text-gray-700 mb-1">City</label>
                                     <input
@@ -217,31 +241,9 @@ export default function ProfilePage() {
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                 </div>
-
-                                <div className="w-full">
-                                    <label className="block text-gray-700 mb-1">Address</label>
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        disabled={!isedit}
-                                        value={address && address != null ? address : ""}
-                                        onChange={(e) => { setaddress(e.target.value) }}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    />
-                                </div>
                             </div>
 
-                            <div>
-                                <label className="block text-gray-700 mb-1">Address Two</label>
-                                <textarea
-                                    name="address"
-                                    value={address2 && address2 != null ? address2 : ""}
-                                    disabled={!isedit}
-                                    onChange={(e) => { setaddress2(e.target.value) }}
-                                    rows="6"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                ></textarea>
-                            </div>
+
 
                             {/* Update Button */}
                             <div className="w-full flex justify-end">

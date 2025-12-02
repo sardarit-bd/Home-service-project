@@ -24,7 +24,7 @@ export default function FeaturedProvidersSection() {
     const [Areas, setAreas] = useState([]);
     const [Services, setServices] = useState([]);
     const [Loading, setLoading] = useState(false);
-    const { services, setservices, area, setarea } = useSearchStore();
+    const { services, setservices, area, setarea, subarea, setsubarea } = useSearchStore();
 
 
 
@@ -70,10 +70,17 @@ export default function FeaturedProvidersSection() {
 
 
 
+    //handle area selection
+    const handleAreaSelect = (e) => {
 
+        if (e.target.value) {
+            setarea(e.target.value.toLowerCase());
+        } else {
+            setarea(e.target.value.toLowerCase());
+            setsubarea(e.target.value.toLowerCase());
+        }
 
-    console.log(Services);
-
+    };
 
 
     //filter services here
@@ -85,6 +92,9 @@ export default function FeaturedProvidersSection() {
 
 
     const finalfilteredServicesandArea = filteredServices?.filter((sr) => {
+
+        if (!area) return true;
+
         const DataSerivesArea = sr?.selectedAreas?.toLowerCase();
         const searchSerivesArea = area?.toLowerCase();
         return DataSerivesArea === searchSerivesArea;
@@ -92,7 +102,23 @@ export default function FeaturedProvidersSection() {
 
 
 
-    console.log(finalfilteredServicesandArea);
+    const filterArea = Areas?.filter((item, index) => {
+        return item?.areaName.toLowerCase() === area.toLowerCase();
+    })
+
+
+
+
+    // This is the Final Filtered Services with Area and SubArea 
+    const finalfilteredServicesandAreaAndSubArea = finalfilteredServicesandArea?.filter((sr) => {
+
+        if (!subarea) return true;
+
+        return sr?.selectedSubareas?.some(
+            (sub) => sub.toLowerCase() === subarea.toLowerCase()
+        );
+
+    });
 
 
 
@@ -106,7 +132,7 @@ export default function FeaturedProvidersSection() {
             <div className="container mx-auto px-6 md:px-10 lg:px-16">
 
 
-                <div className="flex flex-col md:flex-row items-center justify-between w-full mb-10 px-1 md:px-5 py-3">
+                <div className="flex flex-col md:flex-row items-center justify-between w-full mb-10 px-1 md:px-5 py-3 gap-5">
 
 
 
@@ -116,8 +142,10 @@ export default function FeaturedProvidersSection() {
 
 
                     {/* Right Dropdown */}
-                    <div className="flex md:mt-0 items-center justify-end w-full">
-                        <select value={area} onChange={(e) => setarea(e.target.value.toLowerCase())} className="px-1 md:px-5 w-full md:w-fit py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 focus:outline-none cursor-pointer capitalize outline-none">
+                    <div className="flex items-center gap-5 md:mt-0 items-center justify-end w-full">
+                        <select value={area} onChange={(e) => handleAreaSelect(e)} className="px-1 md:px-5 w-full md:w-fit py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 focus:outline-none cursor-pointer capitalize outline-none">
+
+                            <option className="capitalize" value="">Select Metropolitan</option>
 
                             {
                                 Areas?.map((item, index) => {
@@ -128,6 +156,28 @@ export default function FeaturedProvidersSection() {
                             }
 
                         </select>
+
+
+
+
+                        {
+                            area && (
+                                <select value={subarea} onChange={(e) => setsubarea(e.target.value.toLowerCase())} className="px-1 md:px-5 w-full md:w-fit py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 focus:outline-none cursor-pointer capitalize outline-none">
+
+                                    <option className="capitalize" value="">Select Area</option>
+
+                                    {
+                                        filterArea?.[0]?.subareas?.map((item, index) => {
+                                            return (
+                                                <option className="capitalize" value={item?.toLowerCase()} key={index}>{item?.toLowerCase()}</option>
+                                            )
+                                        })
+                                    }
+
+                                </select>
+                            )
+                        }
+
                     </div>
                 </div>
 
@@ -135,9 +185,9 @@ export default function FeaturedProvidersSection() {
                 {/* Providers Grid */}
                 <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">
 
-                    {finalfilteredServicesandArea?.length < 1 ? <span className=" h-[40vh] pl-6 text-center text-2xl">No Data Found</span> : ""}
+                    {finalfilteredServicesandAreaAndSubArea?.length < 1 ? <span className=" h-[40vh] pl-6 text-center text-2xl">No Data Found</span> : ""}
 
-                    {finalfilteredServicesandArea?.map((provider, index) => (
+                    {finalfilteredServicesandAreaAndSubArea?.map((provider, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 40 }}
