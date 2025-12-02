@@ -9,6 +9,10 @@ const useSearchStore = create((set) => ({
 
     area: "",
     setarea: (ar) => set(() => ({ area: ar })),
+
+    subarea: "",
+    setsubarea: (ar) => set(() => ({ subarea: ar })),
+
 }));
 
 export default useSearchStore;

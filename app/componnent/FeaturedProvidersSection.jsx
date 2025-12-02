@@ -5,88 +5,6 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Electricals from "../../public/Electricals.jpg";
-import handyman from "../../public/handyman.jpeg";
-import outdoor from "../../public/outdoor.jpg";
-import plumbing from "../../public/plumbing.jpg";
-
-const providers = [
-    {
-        id: 1,
-        name: "John’s Handyman Services",
-        category: "Handyman",
-        rating: 4.9,
-        reviews: 128,
-        image: handyman,
-    },
-    {
-        id: 2,
-        name: "GreenLeaf Landscaping",
-        category: "Landscaping",
-        rating: 4.8,
-        reviews: 97,
-        image: outdoor,
-    },
-    {
-        id: 3,
-        name: "AquaPro Plumbing",
-        category: "Plumbing",
-        rating: 5.0,
-        reviews: 156,
-        image: plumbing,
-    },
-    {
-        id: 4,
-        name: "SmartFix Electricals",
-        category: "Electrical",
-        rating: 4.7,
-        reviews: 88,
-        image: Electricals,
-    },
-    {
-        id: 1,
-        name: "John’s Handyman Services",
-        category: "Handyman",
-        rating: 4.9,
-        reviews: 128,
-        image: handyman,
-    },
-    {
-        id: 2,
-        name: "GreenLeaf Landscaping",
-        category: "Landscaping",
-        rating: 4.8,
-        reviews: 97,
-        image: outdoor,
-    },
-    {
-        id: 3,
-        name: "AquaPro Plumbing",
-        category: "Plumbing",
-        rating: 5.0,
-        reviews: 156,
-        image: plumbing,
-    },
-    {
-        id: 4,
-        name: "SmartFix Electricals",
-        category: "Electrical",
-        rating: 4.7,
-        reviews: 88,
-        image: Electricals,
-    },
-];
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -95,7 +13,6 @@ export default function FeaturedProvidersSection() {
 
     const [Services, setServices] = useState([]);
     const [Loading, setLoading] = useState(false);
-
 
 
     const fetchServices = async () => {
@@ -148,7 +65,7 @@ export default function FeaturedProvidersSection() {
                 </motion.div>
 
                 {/* Providers Grid */}
-                <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8">
+                <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-8">
                     {FeaturedServices?.map((provider, index) => (
                         <motion.div
                             key={index}

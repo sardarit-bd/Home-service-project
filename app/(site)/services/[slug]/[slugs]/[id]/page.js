@@ -7,11 +7,15 @@ import ProfileSkeleton from "@/app/componnent/skelaton/ProfileSkeleton";
 import SpinLoader from "@/app/componnent/SpingLoader";
 import getId from "@/utilis/helper/cookie/getid";
 import getCookie from "@/utilis/helper/cookie/gettooken";
+import maskMiddle from "@/utilis/helper/maskMiddle";
 import { motion } from "framer-motion";
 import { Mail, Phone, Star } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { CiMail } from "react-icons/ci";
+import { LuPhoneCall } from "react-icons/lu";
 import { MdOutlineNotificationImportant } from "react-icons/md";
+import { SlLocationPin } from "react-icons/sl";
 import { toast, ToastContainer } from "react-toastify";
 
 
@@ -31,22 +35,6 @@ export default function ServiceDetailsPage() {
 
 
 
-
-    const [reviews, setReviews] = useState([
-        {
-            id: 1,
-            name: "Emily Johnson",
-            rating: 5,
-            text: "Incredible craftsmanship! The handyman was polite, professional, and quick to finish the repairs.",
-        },
-        {
-            id: 2,
-            name: "Michael Smith",
-            rating: 4,
-            text: "Great value for money. Arrived on time and fixed multiple issues efficiently.",
-        },
-    ]);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (newReview.name && newReview.text) {
@@ -54,9 +42,6 @@ export default function ServiceDetailsPage() {
             setNewReview({ name: "", rating: 5, text: "" });
         }
     };
-
-
-
 
 
 
@@ -250,31 +235,181 @@ export default function ServiceDetailsPage() {
 
                         </h2>
 
-                        {/* Existing Reviews */}
+
+                        {/* added here start */}
+
                         <div className={`space-y-6 mb-10 relative ${!token && "blurred-text"}`}>
                             {Service?.reviews?.reviewsDetails?.map((r) => (
                                 <div
                                     key={r.id}
-                                    className="p-4 bg-gray-50 rounded-lg border border-gray-100"
+                                    className="p-5 bg-white rounded-xl border border-gray-200 shadow-sm"
                                 >
-                                    <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-semibold text-gray-900">{r?.user?.fname + " " + r?.user?.mname + " " + r?.user?.lname}</h4>
-                                        <div className="flex gap-.5 text-yellow-500">
+                                    {/* Top Section */}
+                                    <div className="flex items-start justify-between">
+                                        <div>
+                                            {/* USER NAME */}
+                                            <h4 className="font-semibold text-gray-900 text-[18px]">
+                                                {/* {`${r?.user?.fname} ${r?.user?.mname} ${r?.user?.lname}`} */}
+                                                {
+                                                    maskMiddle(r?.user?.fname + " " + r?.user?.mname + " " + r?.user?.lname)
+                                                }
+                                            </h4>
+
+                                            {/* USER LOCATION & EMAIL */}
+                                            <p className="text-md text-gray-500 mt-0.5 flex items-center gap-1">
+                                                <SlLocationPin className="text-sky-400" />
+                                                <span>{maskMiddle(r?.user?.address + "," + r?.user?.city + "-" + r?.user?.zipcode)}</span>
+                                            </p>
+                                            <p className="text-md text-gray-500 flex items-center gap-2">
+                                                <div className="flex items-center gap-1">
+                                                    <CiMail className="text-sky-400" /> <span>{maskMiddle(r?.user?.email)}</span>
+                                                </div>
+                                                |
+                                                <div className="flex items-center gap-1">
+                                                    <LuPhoneCall className="text-sky-400" />
+                                                    <span>{maskMiddle(r?.user?.phone)}</span>
+                                                </div>
+                                            </p>
+                                        </div>
+
+                                        {/* Star Rating */}
+                                        <div className="flex gap-[2px] text-yellow-500">
                                             {Array.from({ length: 5 }).map((_, i) => (
                                                 <Star
                                                     key={i}
-                                                    size={19}
+                                                    size={20}
                                                     fill={i < r?.reviewStar ? "currentColor" : "none"}
                                                     strokeWidth={1.5}
                                                 />
                                             ))}
                                         </div>
                                     </div>
-                                    <p className="text-gray-700 text-sm leading-relaxed">{r?.reviewDescription}</p>
+
+                                    {/* Review Text */}
+                                    <p className="text-gray-700 text-sm leading-relaxed mt-3">
+                                        {r?.reviewDescription}
+                                    </p>
                                 </div>
                             ))}
-
                         </div>
+
+
+
+
+                        {/* added here end */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                         {/* Add Review */}
                         <div className="border-t pt-6">
