@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LuUser } from "react-icons/lu";
 import { MdDashboard, MdOutlineAccountCircle } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
+import CreditPoint from "./CreditPoint";
 
 
 // ✅ User dropdown menu
@@ -24,6 +25,10 @@ const UserMenu = ({ loginUser, handleLogout }) => {
                                         {loginUser?.role}
                                     </span>
                                 </div>
+                            </div>
+
+                            <div>
+                                <CreditPoint />
                             </div>
 
                             {loginUser?.role !== "user" && (

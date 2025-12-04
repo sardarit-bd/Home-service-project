@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { TbBrandGoogleHome } from "react-icons/tb";
+import logo from "../../public/logo.png";
 import useNavIsOpenStore from "../../store/useNavIsOpenStore";
 import Navigation from "../componnent/Navigation";
 import HeaderAuth from "./HeaderAuth";
@@ -23,11 +24,7 @@ const Header = () => {
             }`}
         >
           <Link href={"/"} className="flex items-center h-full">
-            {/* <Image src={logo} alt="Logo" className="w-[120px]" /> */}
-            <h2 className="text-2xl font-bold text-[var(--brandColor)] flex items-center gap-1">
-              <TbBrandGoogleHome className="text-5xl" />
-              <span className="hidden md:block text-md font-semibold pt-1">Services</span>
-            </h2>
+            <Image src={logo} alt="Logo" className="w-[120px]" />
           </Link>
           <Navigation isOpen={isOpen} setisOpen={setisOpen} />
 

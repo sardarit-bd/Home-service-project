@@ -9,8 +9,8 @@ const geistSans = Poppins({
 });
 
 export const metadata = {
-  title: "Custom team Card Designer",
-  description: "Design your own custom cards with ease.",
+  title: "Home Service Provider",
+  description: "Compare trusted local professionals for plumbing, electrical, remodeling, cleaning, landscaping, and more — all reviewed by real Chicago homeowners.",
 };
 
 export default function RootLayout({ children }) {
