@@ -20,7 +20,7 @@ const CreditPoint = () => {
 
 
     useEffect(() => {
-        await fetchAllCreditsPoint();
+        fetchAllCreditsPoint();
     }, [])
 
 
