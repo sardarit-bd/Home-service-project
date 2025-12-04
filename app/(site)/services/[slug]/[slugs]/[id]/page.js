@@ -240,17 +240,14 @@ export default function ServiceDetailsPage() {
                                     </span>
                                 )
                             }
-
                         </h2>
 
 
                         {/* added here start */}
-
                         <div className={`space-y-6 mb-10 relative ${!token && "blurred-text"}`}>
                             {Service?.reviews?.reviewsDetails?.map((r, index) => (
-                                <div className="p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
+                                <div key={index} className="p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
                                     <div
-                                        key={index}
                                         className="flex items-start justify-between"
                                     >
                                         {/* Top Section */}
