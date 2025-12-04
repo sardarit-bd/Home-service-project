@@ -7,6 +7,7 @@ import ProfileSkeleton from "@/app/componnent/skelaton/ProfileSkeleton";
 import SpinLoader from "@/app/componnent/SpingLoader";
 import getId from "@/utilis/helper/cookie/getid";
 import getCookie from "@/utilis/helper/cookie/gettooken";
+import countCharacters from "@/utilis/helper/countCharacters";
 import maskMiddle from "@/utilis/helper/maskMiddle";
 import { motion } from "framer-motion";
 import { Mail, Phone, Star } from "lucide-react";
@@ -32,16 +33,10 @@ export default function ServiceDetailsPage() {
     const [rating, setRating] = useState(0);
     const userId = getId();
     const [newReviewDes, setnewReviewDes] = useState('');
+    const [Amount, setamount] = useState('');
+    const [goodAboutService, setgoodAboutService] = useState('');
+    const [needToBeImproved, setneedToBeImproved] = useState('');
 
-
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (newReview.name && newReview.text) {
-            setReviews([{ ...newReview, id: Date.now() }, ...reviews]);
-            setNewReview({ name: "", rating: 5, text: "" });
-        }
-    };
 
 
 
@@ -90,37 +85,50 @@ export default function ServiceDetailsPage() {
             productId: Service?._id,
             userId: userId,
             reviewDescription: newReviewDes,
+            amountSpent: Amount,
+            whatsgood: goodAboutService,
+            whatsbad: needToBeImproved,
             reviewStar: rating
         }
 
         try {
             if (newReviewDes && rating > 0 && token) {
-                setbtnLoading(true);
 
-                const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/createreview`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`,
-                        },
-                        body: JSON.stringify(reviewData),
+
+                if (Amount && !isNaN(Amount) && Number(Amount) > 0) {
+                    setbtnLoading(true);
+
+                    const res = await fetch(
+                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/createreview`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify(reviewData),
+                        }
+                    );
+
+                    const data = await res.json();
+
+                    if (data.success) {
+                        toast.success("Review submitted successfully!");
+                        setnewReviewDes('');
+                        setRating(0);
+                        setamount('');
+                        setgoodAboutService('');
+                        setneedToBeImproved('');
+                        setTimeout(() => {
+                            fetchService();
+                        }, 1000);
+                    } else {
+                        toast.error("Failed to submit review.");
                     }
-                );
-
-                const data = await res.json();
-
-                if (data.success) {
-                    toast.success("Review submitted successfully!");
-                    setnewReviewDes('');
-                    setRating(0);
-                    setTimeout(() => {
-                        fetchService();
-                    }, 1000);
                 } else {
-                    toast.error("Failed to submit review.");
+                    toast.error("Ammount spent should be a valid number and greater than zero.");
                 }
+
             } else {
                 toast.error("Please provide review description and rating, and ensure you are logged in.");
             }
@@ -240,36 +248,51 @@ export default function ServiceDetailsPage() {
 
                         <div className={`space-y-6 mb-10 relative ${!token && "blurred-text"}`}>
                             {Service?.reviews?.reviewsDetails?.map((r) => (
-                                <div
-                                    key={r.id}
-                                    className="p-5 bg-white rounded-xl border border-gray-200 shadow-sm"
-                                >
-                                    {/* Top Section */}
-                                    <div className="flex items-start justify-between">
-                                        <div>
-                                            {/* USER NAME */}
-                                            <h4 className="font-semibold text-gray-900 text-[18px]">
-                                                {/* {`${r?.user?.fname} ${r?.user?.mname} ${r?.user?.lname}`} */}
-                                                {
-                                                    maskMiddle(r?.user?.fname + " " + r?.user?.mname + " " + r?.user?.lname)
-                                                }
-                                            </h4>
+                                <div className="p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
+                                    <div
+                                        key={r.id}
+                                        className="flex items-start justify-between"
+                                    >
+                                        {/* Top Section */}
+                                        <div className="flex items-start justify-between">
+                                            <div>
+                                                {/* USER NAME */}
+                                                <h4 className="font-semibold text-gray-900 text-[18px]">
+                                                    {/* {`${r?.user?.fname} ${r?.user?.mname} ${r?.user?.lname}`} */}
+                                                    {
+                                                        maskMiddle(r?.user?.fname + " " + r?.user?.mname + " " + r?.user?.lname)
+                                                    }
+                                                </h4>
 
-                                            {/* USER LOCATION & EMAIL */}
-                                            <p className="text-md text-gray-500 mt-0.5 flex items-center gap-1">
-                                                <SlLocationPin className="text-sky-400" />
-                                                <span>{maskMiddle(r?.user?.address + "," + r?.user?.city + "-" + r?.user?.zipcode)}</span>
-                                            </p>
-                                            <p className="text-md text-gray-500 flex items-center gap-2">
-                                                <div className="flex items-center gap-1">
-                                                    <CiMail className="text-sky-400" /> <span>{maskMiddle(r?.user?.email)}</span>
+                                                {/* USER LOCATION & EMAIL */}
+                                                <p className="text-md text-gray-500 mt-0.5 flex items-center gap-1">
+                                                    <SlLocationPin className="text-sky-400" />
+                                                    <span>{maskMiddle(r?.user?.address + "," + r?.user?.city + "-" + r?.user?.zipcode)}</span>
+                                                </p>
+                                                <p className="text-md text-gray-500 flex items-center gap-2">
+                                                    <div className="flex items-center gap-1">
+                                                        <CiMail className="text-sky-400" /> <span>{maskMiddle(r?.user?.email)}</span>
+                                                    </div>
+                                                    |
+                                                    <div className="flex items-center gap-1">
+                                                        <LuPhoneCall className="text-sky-400" />
+                                                        <span>{maskMiddle(r?.user?.phone)}</span>
+                                                    </div>
+                                                </p>
+
+                                                <div>
+                                                    <span className="text-gray-700">What's Good:</span> <b className="font-medium">{r?.whatsgood == "" ? "Nothings" : r?.whatsgood}</b>
                                                 </div>
-                                                |
-                                                <div className="flex items-center gap-1">
-                                                    <LuPhoneCall className="text-sky-400" />
-                                                    <span>{maskMiddle(r?.user?.phone)}</span>
+                                                <div>
+                                                    <span className="text-gray-700">Needs Improvement:</span> <b className="font-medium">{r?.whatsbad == "" ? "Nothings" : r?.whatsbad}</b>
                                                 </div>
-                                            </p>
+                                                <div>
+                                                    <span className="text-gray-700">Amount Spent</span>: <span className="font-medium">${r?.amountSpent} </span>
+                                                </div>
+                                                <div className="text-xs mt-2 text-gray-400">
+                                                    <span>Date:</span> <span className="font-medium">{new Date(r?.createdAt).toLocaleDateString()}</span>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         {/* Star Rating */}
@@ -286,10 +309,11 @@ export default function ServiceDetailsPage() {
                                     </div>
 
                                     {/* Review Text */}
-                                    <p className="text-gray-700 text-sm leading-relaxed mt-3">
-                                        {r?.reviewDescription}
-                                    </p>
+                                    <div div div div div p className="text-gray-700 text-sm leading-relaxed mt-3" >
+                                        {r?.reviewDescription}</div>
+
                                 </div>
+
                             ))}
                         </div>
 
@@ -306,135 +330,51 @@ export default function ServiceDetailsPage() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         {/* Add Review */}
                         <div className="border-t pt-6">
                             <h3 className="font-semibold text-gray-900 mb-4 text-lg">
-                                Write a Review <span className="bg-red-100 border-2 border-red-200 rounded-md ml-2 px-1 text-sm">Min:10 And Max:500 characters </span>
+                                Write a Review
                             </h3>
                             <div className="grid gap-3 mb-4">
-                                {/* <input
+
+                                <span className="bg-red-50 w-fit border-1 border-red-100  rounded-md px-1 text-xs">Required </span>
+                                <input
+                                    value={Amount}
+                                    onChange={(e) => { setamount(e.target.value) }}
+                                    type="number"
+                                    placeholder="Amount spent for the Service"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
+                                />
+
+                                <input
+                                    value={goodAboutService}
+                                    onChange={(e) => { setgoodAboutService(e.target.value) }}
                                     type="text"
-                                    placeholder="Your Name"
+                                    placeholder="what's good about the service provider"
                                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
-                                    value={newReview.name}
-                                    onChange={(e) =>
-                                        setNewReview({ ...newReview, name: e.target.value })
-                                    }
-                                /> */}
-                                <textarea
-                                    rows="4"
-                                    placeholder="Your Review..."
+                                />
+                                <input
+                                    value={needToBeImproved}
+                                    onChange={(e) => { setneedToBeImproved(e.target.value) }}
+                                    type="text"
+                                    placeholder="what's need to be improved for the service provider"
                                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
-                                    value={newReviewDes}
-                                    onChange={(e) =>
-                                        setnewReviewDes(e.target.value)
-                                    }
-                                ></textarea>
+                                />
+                                <span className="bg-red-50 w-fit border-1 border-red-100 rounded-md px-1 text-xs">Required: Min:50 And Max:1000 characters and if you Write more than 100 characters Review then you will got 1 Credit</span>
+                                <div className="relative">
+                                    <textarea
+                                        rows="6"
+                                        maxLength={1000}
+                                        placeholder="Detailed description of the service done"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
+                                        value={newReviewDes}
+                                        onChange={(e) =>
+                                            setnewReviewDes(e.target.value)
+                                        }
+                                    >
+                                    </textarea>
+                                    <span className="absolute bottom-2 right-0 bg-sky-400 text-white p-0.5 rounded-sm pointer-events-none">{countCharacters(newReviewDes)}/1000</span>
+                                </div>
                                 <div className="flex items-center gap-2">
                                     <label className="text-lg font-bold text-gray-700">
                                         Rating:
@@ -453,10 +393,10 @@ export default function ServiceDetailsPage() {
                             </button>
                         </div>
                     </motion.div>
-                </div>
+                </div >
 
                 {/* RIGHT: STICKY IMAGE CARD */}
-                <DetailsPageSideImageWrper serviceImageUrls={Service?.serviceImages} />
+                < DetailsPageSideImageWrper serviceImageUrls={Service?.serviceImages} />
 
                 <ToastContainer />
             </div >
