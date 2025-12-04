@@ -247,10 +247,10 @@ export default function ServiceDetailsPage() {
                         {/* added here start */}
 
                         <div className={`space-y-6 mb-10 relative ${!token && "blurred-text"}`}>
-                            {Service?.reviews?.reviewsDetails?.map((r) => (
+                            {Service?.reviews?.reviewsDetails?.map((r, index) => (
                                 <div className="p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
                                     <div
-                                        key={r.id}
+                                        key={index}
                                         className="flex items-start justify-between"
                                     >
                                         {/* Top Section */}
@@ -281,7 +281,7 @@ export default function ServiceDetailsPage() {
                                                 </p>
 
                                                 <div>
-                                                    <span className="text-gray-700">What's Good:</span> <b className="font-medium">{r?.whatsgood == "" ? "Nothings" : r?.whatsgood}</b>
+                                                    <span className="text-gray-700">What&apos;s Good:</span> <b className="font-medium">{r?.whatsgood == "" ? "Nothings" : r?.whatsgood}</b>
                                                 </div>
                                                 <div>
                                                     <span className="text-gray-700">Needs Improvement:</span> <b className="font-medium">{r?.whatsbad == "" ? "Nothings" : r?.whatsbad}</b>
@@ -309,9 +309,9 @@ export default function ServiceDetailsPage() {
                                     </div>
 
                                     {/* Review Text */}
-                                    <div div div div div p className="text-gray-700 text-sm leading-relaxed mt-3" >
-                                        {r?.reviewDescription}</div>
-
+                                    <div className="text-gray-700 text-sm leading-relaxed mt-3" >
+                                        {r?.reviewDescription}
+                                    </div>
                                 </div>
 
                             ))}
