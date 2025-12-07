@@ -334,35 +334,28 @@ export default function ServiceDetailsPage() {
                             </h3>
                             <div className="grid gap-3 mb-4">
 
-                                <span className="bg-red-50 w-fit border-1 border-red-100  rounded-md px-1 text-xs">Required </span>
+                                <label className="flex items-center gap-2">
+                                    <span className="text-gray-700">Amount Spend:</span>
+                                    <span className="bg-red-50 w-fit border-1 border-red-100  rounded-md px-0.5 text-[11px] font-thin">Required </span>
+                                </label>
                                 <input
                                     value={Amount}
                                     onChange={(e) => { setamount(e.target.value) }}
                                     type="number"
-                                    placeholder="Amount spent for the Service"
                                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
                                 />
 
-                                <input
-                                    value={goodAboutService}
-                                    onChange={(e) => { setgoodAboutService(e.target.value) }}
-                                    type="text"
-                                    placeholder="what's good about the service provider"
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
-                                />
-                                <input
-                                    value={needToBeImproved}
-                                    onChange={(e) => { setneedToBeImproved(e.target.value) }}
-                                    type="text"
-                                    placeholder="what's need to be improved for the service provider"
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
-                                />
-                                <span className="bg-red-50 w-fit border-1 border-red-100 rounded-md px-1 text-xs">Required: Min:50 And Max:1000 characters and if you Write more than 100 characters Review then you will got 1 Credit</span>
+
+
+                                <label className="flex items-center gap-2">
+                                    <span className="text-gray-700">Descriptions of the Service :</span>
+                                    <span className="bg-red-50 w-fit border-1 border-red-100  rounded-md px-0.5 text-[11px] font-thin">Required: Min:50 And Max:1000 characters </span>
+                                </label>
+
                                 <div className="relative">
                                     <textarea
                                         rows="6"
                                         maxLength={1000}
-                                        placeholder="Detailed description of the service done"
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
                                         value={newReviewDes}
                                         onChange={(e) =>
@@ -372,6 +365,31 @@ export default function ServiceDetailsPage() {
                                     </textarea>
                                     <span className="absolute bottom-2 right-0 bg-sky-400 text-white p-0.5 rounded-sm pointer-events-none">{countCharacters(newReviewDes)}/1000</span>
                                 </div>
+
+
+
+                                <label className="flex items-center gap-2">
+                                    <span className="text-gray-700">what&lsquo;s good about the service provider?:</span>
+                                </label>
+                                <textarea
+                                    rows="6"
+                                    value={goodAboutService}
+                                    onChange={(e) => { setgoodAboutService(e.target.value) }}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
+                                ></textarea>
+
+                                <label className="flex items-center gap-2">
+                                    <span className="text-gray-700">what&lsquo;s need to be improved for the service provider?</span>
+                                </label>
+                                <textarea
+                                    value={needToBeImproved}
+                                    onChange={(e) => { setneedToBeImproved(e.target.value) }}
+                                    rows="6"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brandColor)]"
+                                ></textarea>
+
+
+
                                 <div className="flex items-center gap-2">
                                     <label className="text-lg font-bold text-gray-700">
                                         Rating:
