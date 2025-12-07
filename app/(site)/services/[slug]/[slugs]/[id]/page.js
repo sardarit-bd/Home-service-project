@@ -369,7 +369,7 @@ export default function ServiceDetailsPage() {
 
 
                                 <label className="flex items-center gap-2">
-                                    <span className="text-gray-700">what's good about the service provider?:</span>
+                                    <span className="text-gray-700">what&lsquo;s good about the service provider?:</span>
                                 </label>
                                 <textarea
                                     rows="6"
@@ -379,7 +379,7 @@ export default function ServiceDetailsPage() {
                                 ></textarea>
 
                                 <label className="flex items-center gap-2">
-                                    <span className="text-gray-700">what's need to be improved for the service provider?</span>
+                                    <span className="text-gray-700">what&lsquo;s need to be improved for the service provider?</span>
                                 </label>
                                 <textarea
                                     value={needToBeImproved}
