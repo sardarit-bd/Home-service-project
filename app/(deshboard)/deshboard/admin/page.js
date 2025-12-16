@@ -33,9 +33,6 @@ export default function AdminDashboard() {
 
 
 
-    console.log(stats);
-
-
 
 
     if (loading) return <DashboardSkeleton />;
