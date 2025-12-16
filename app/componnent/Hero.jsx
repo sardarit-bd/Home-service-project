@@ -8,7 +8,7 @@ export default function HeroSection() {
 
 
     return (
-        <section className="relative h-[95vh] bg-whtie text-black overflow-hidden py-16 md:py-24">
+        <section className="relative flex h-[95vh] bg-whtie text-black overflow-hidden py-16 md:py-24">
 
             <div className="container md:flex items-center justify-center  mx-auto px-2 md:px-7 text-center md:text-center">
                 <div className="">
