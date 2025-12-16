@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function JoinBannerSection() {
     return (
-        <section className="relative py-20 overflow-hidden">
+        <section className="relative py-20 overflow-hidden bg-[#f3f4f6]">
 
             <div className="container mx-auto px-6 md:px-10 lg:px-16 text-center text-white relative z-10">
                 {/* Title */}

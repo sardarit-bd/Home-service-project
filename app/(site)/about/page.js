@@ -1,8 +1,8 @@
 "use client";
 
+import JoinBannerSection from "@/app/componnent/JoinBannerSection";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import aboutImage from "../../../public/home-service-bg.jpg";
 
 
@@ -124,36 +124,11 @@ export default function AboutPage() {
                 </div>
             </div>
 
-            {/* === CTA Section === */}
-            <div className="container mx-auto px-6 md:px-10 lg:px-16 py-20 text-center">
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="text-3xl md:text-4xl font-bold mb-4"
-                >
-                    Ready to Join the <span className="text-[var(--brandColor,#00a6f4)]">Community?</span>
-                </motion.h2>
-                <p className="text-gray-600 max-w-2xl mx-auto mb-8 text-lg">
-                    Whether you’re a homeowner looking to find trusted help or a professional ready to grow your reputation — Home Service Reviews connects you to the right people.
-                </p>
 
-                <div className="flex flex-col md:flex-row justify-center items-center gap-5">
-                    <Link
-                        href="/services/handyman/carpentry"
-                        className="px-8 py-3 bg-[var(--brandColor,#00a6f4)] text-white font-semibold rounded-full shadow hover:opacity-90 transition-all"
-                    >
-                        Write a Review
-                    </Link>
-                    <Link
-                        href="/signin"
-                        className="px-8 py-3 border border-[var(--brandColor,#00a6f4)] text-[var(--brandColor,#00a6f4)] font-semibold rounded-full hover:bg-[var(--brandColor,#00a6f4)] hover:text-white transition-all"
-                    >
-                        Join as Provider
-                    </Link>
-                </div>
-            </div>
+
+            <JoinBannerSection />
+
+
         </section>
     );
 }
