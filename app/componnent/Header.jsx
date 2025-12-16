@@ -24,7 +24,7 @@ const Header = () => {
             }`}
         >
           <Link href={"/"} className="flex items-center h-full">
-            <Image src={logo} alt="Logo" className="w-[120px]" />
+            <Image src={logo} alt="Logo" className="w-[90px]" />
           </Link>
           <Navigation isOpen={isOpen} setisOpen={setisOpen} />
 

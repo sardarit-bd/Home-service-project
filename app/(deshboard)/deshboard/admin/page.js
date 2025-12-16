@@ -1,59 +1,23 @@
 "use client";
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function AdminDashboard() {
     const [loading, setLoading] = useState(false);
     const [stats, setStats] = useState(null);
 
-    const [chartSeries, setChartSeries] = useState([
-        { name: "Payments", data: [1200, 1500, 900, 1400] },
-        { name: "Orders", data: [20, 25, 1800, 22] },
-    ]);
-
-    const chartOptions = {
-        chart: { type: "line", toolbar: { show: false }, zoom: { enabled: false } },
-        stroke: { curve: "smooth", width: 3 },
-        xaxis: {
-            categories: ["Week 1", "Week 2", "Week 3", "Week 4"],
-            labels: { style: { colors: "#6B7280", fontSize: "14px" } },
-            axisBorder: { show: true, color: "#D1D5DB" },
-        },
-        yaxis: { labels: { style: { colors: "#6B7280", fontSize: "14px" } } },
-        colors: ["#4F46E5", "#29b8ebff"],
-        dataLabels: { enabled: false },
-        legend: { position: "top", horizontalAlign: "right" },
-        grid: { strokeDashArray: 4, borderColor: "#E5E7EB" },
-        tooltip: { theme: "light" },
-    };
 
     // Simulate fetching data from server
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
 
-            setTimeout(() => {
-                setLoading(false);
-            }, 1000);
-
             try {
                 // Replace with your actual API call
-                const res = await fetch("/api/admin-dashboard");
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/deshboard`);
                 const data = await res.json();
 
-                setStats({
-                    totalUsers: data.totalUsers,
-                    totalOrders: data.totalOrders,
-                    totalPayments: data.totalPayments,
-                });
-
-                setChartSeries([
-                    { name: "Payments", data: data.payments },
-                    { name: "Orders", data: data.orders },
-                ]);
+                setStats(data?.data);
 
             } catch (error) {
 
@@ -63,8 +27,13 @@ export default function AdminDashboard() {
             }
         }
 
-        //fetchData();
+        fetchData();
     }, []);
+
+
+
+
+
 
     if (loading) return <DashboardSkeleton />;
 
@@ -78,28 +47,38 @@ export default function AdminDashboard() {
                     <h2 className="text-gray-500 text-sm font-semibold uppercase tracking-wide">
                         Total Users
                     </h2>
-                    <p className="text-3xl font-bold text-gray-800 mt-2">{"199k"}</p>
+                    <p className="text-3xl font-bold text-gray-800 mt-2">{stats?.userCount}</p>
                 </div>
                 <div className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
                     <h2 className="text-gray-500 text-sm font-semibold uppercase tracking-wide">
-                        Total Orders
+                        Total Reviews
                     </h2>
-                    <p className="text-3xl font-bold text-gray-800 mt-2">{"10K"}</p>
+                    <p className="text-3xl font-bold text-gray-800 mt-2">{stats?.reviewCount}</p>
                 </div>
                 <div className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
                     <h2 className="text-gray-500 text-sm font-semibold uppercase tracking-wide">
-                        Total Payments
+                        Total Services
                     </h2>
-                    <p className="text-3xl font-bold text-gray-800 mt-2">$72,000</p>
+                    <p className="text-3xl font-bold text-gray-800 mt-2">{stats?.productCount}</p>
                 </div>
-            </div>
-
-            {/* Chart Section */}
-            <div className="bg-white p-6 rounded-xl shadow">
-                <h2 className="text-gray-700 text-lg font-semibold mb-4">
-                    Last Month Payments & Orders
-                </h2>
-                <Chart options={chartOptions} series={chartSeries} type="line" height={350} />
+                <div className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
+                    <h2 className="text-gray-500 text-sm font-semibold uppercase tracking-wide">
+                        Total Category
+                    </h2>
+                    <p className="text-3xl font-bold text-gray-800 mt-2">{stats?.categoryCount}</p>
+                </div>
+                <div className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
+                    <h2 className="text-gray-500 text-sm font-semibold uppercase tracking-wide">
+                        Total Areas
+                    </h2>
+                    <p className="text-3xl font-bold text-gray-800 mt-2">{stats?.areaCount}</p>
+                </div>
+                <div className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
+                    <h2 className="text-gray-500 text-sm font-semibold uppercase tracking-wide">
+                        Total Contacted Submited
+                    </h2>
+                    <p className="text-3xl font-bold text-gray-800 mt-2">{stats?.contactCount}</p>
+                </div>
             </div>
         </div>
     );
