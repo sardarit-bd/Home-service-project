@@ -28,7 +28,11 @@ const UserMenu = ({ loginUser, handleLogout }) => {
                             </div>
 
                             <div>
-                                <CreditPoint />
+                                {
+                                    loginUser?.role === "user" && (
+                                        <CreditPoint />
+                                    )
+                                }
                             </div>
 
                             {loginUser?.role !== "user" && (
