@@ -17,17 +17,23 @@ import UserMenu from "./UserMenu";
 const HeaderAuth = ({ isOpen, setisOpen }) => {
 
 
-
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const [hoveredMain, setHoveredMain] = useState(null);
   const router = useRouter();
   const { loginUser, setLoginUser } = useLogedUserStore();
+  const [myToken, setmyToken] = useState("")
 
-  const token = getCookie();
-  const role = getRole();
-  const name = getEmail();
 
   useEffect(() => {
+
+    setMounted(true);
+
+    const token = getCookie();
+    const role = getRole();
+    const name = getEmail();
+
+    setmyToken(token);
     setLoginUser({ name, token, role });
   }, []);
 
@@ -49,10 +55,15 @@ const HeaderAuth = ({ isOpen, setisOpen }) => {
     }
   };
 
+
+  if (!mounted) return null; // 🔑 THIS FIXES HYDRATION
+
+
+
   return (
     <div className="flex items-center justify-end">
       {/* Auth Section */}
-      {!token ? (
+      {!myToken ? (
 
         <div className="flex flex-row items-center justify-start px-6 md:justify-end gap-4">
           <Link

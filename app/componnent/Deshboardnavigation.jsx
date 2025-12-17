@@ -39,6 +39,12 @@ const DeshboardNavigation = ({ loginUser }) => {
       link: "/deshboard/admin/allServices",
     },
     {
+      name: "Credits Management",
+      nested: false,
+      sub: [],
+      link: "/deshboard/admin/credits",
+    },
+    {
       name: "Contact",
       nested: false,
       sub: [],
