@@ -25,13 +25,15 @@ const HeaderAuth = ({ isOpen, setisOpen }) => {
   const [myToken, setmyToken] = useState("")
 
 
+  const token = getCookie();
+  const role = getRole();
+  const name = getEmail();
+
   useEffect(() => {
 
     setMounted(true);
 
-    const token = getCookie();
-    const role = getRole();
-    const name = getEmail();
+
 
     setmyToken(token);
     setLoginUser({ name, token, role });
@@ -39,7 +41,7 @@ const HeaderAuth = ({ isOpen, setisOpen }) => {
 
   /*************** handle logout funciton is here ******************/
   const handlelogout = async () => {
-    const response = await MakePost("logout", {}, token);
+    const response = await MakePost("logout", {}, myToken);
 
     if (response.success) {
       setCookie("token", "", 1);
@@ -63,7 +65,7 @@ const HeaderAuth = ({ isOpen, setisOpen }) => {
   return (
     <div className="flex items-center justify-end">
       {/* Auth Section */}
-      {!myToken ? (
+      {!token ? (
 
         <div className="flex flex-row items-center justify-start px-6 md:justify-end gap-4">
           <Link

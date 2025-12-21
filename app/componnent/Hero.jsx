@@ -1,10 +1,49 @@
 "use client";
 
+import getId from "@/utilis/helper/cookie/getid";
+import getCookie from "@/utilis/helper/cookie/gettooken";
+import MakeGet from "@/utilis/requestrespose/get";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
 import HeroSearchBar from "./HeroSearchBar";
 
 export default function HeroSection() {
+
+
+
+    const id = getId();
+    const token = getCookie();
+    const [alldata, setalldata] = useState(null);
+    const [fetchloading, setfetchloading] = useState(false);
+
+
+    const fetching = useCallback(async (id, token) => {
+        try {
+            setfetchloading(true);
+            const response = await MakeGet(`user/${id}`, token);
+            setalldata(response?.data);
+            setfetchloading(false);
+        } catch (error) {
+            console.error("Error fetching profile:", error);
+            setfetchloading(false);
+        }
+    }, [id, token]);
+
+
+    // Simulate fetching user data
+    useEffect(() => {
+
+        fetching(id, token);
+
+    }, [id, token, fetching]);
+
+
+
+
+    console.log(alldata);
+
+
 
 
     return (
@@ -22,7 +61,7 @@ export default function HeroSection() {
                         Find, Review & Hire the Best{" "}
                         <br />
                         <span className="text-[var(--brandColor,#00a6f4)]">Home Service Providers </span>
-                        in Chicago
+                        in {!alldata ? "Chicago" : alldata?.city}
                     </motion.h1>
 
                     {/* Subheadline */}
