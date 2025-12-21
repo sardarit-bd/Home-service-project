@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import useLoadingStore from "../../../store/useLoadingStore";
-import logingandsignupmakepost from "../../../utilis/requestrespose/logingandsignupmakepost";
 
 import useLogedUserStore from "@/store/useLogedUser";
 import { useState } from "react";
@@ -29,16 +28,30 @@ const ForgotPas = () => {
 
         if (email) {
             setLoading(true);
-            const response = await logingandsignupmakepost("api/forgotpass", { email });
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/forgotpass`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                },
+                body: JSON.stringify({ email }),
+            });
 
             setLoading(false);
 
-            if (response) {
-                setstage(1);
-                toast.success(response?.message);
+            const res = await response.json();
+
+            console.log(res);
+
+
+            if (res.status === 404) {
+                toast.warn(res?.message);
 
             } else {
-                toast.error("Something Went Wrong");
+                toast.success(res?.message);
+                setTimeout(() => {
+                    setstage(1);
+                }, 1000);
             }
         } else {
             toast.warn("Email is Required");
@@ -53,22 +66,34 @@ const ForgotPas = () => {
 
         e.preventDefault();
 
-        console.log(otp);
-
 
         if (otp) {
             setLoading(true);
-            const response = await logingandsignupmakepost("api/verify", { email, otp });
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/verifyotp`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                },
+                body: JSON.stringify({ email, otp }),
+            });
 
             setLoading(false);
 
-            if (response) {
-                setstage(2);
-                toast.success(response?.message);
+            const res = await response.json();
+
+
+            if (res.status === 400) {
+                toast.warn(res?.message);
 
             } else {
-                toast.error("OTP Verify Failed");
+                toast.success(res?.message);
+                setTimeout(() => {
+                    setstage(2);
+                }, 1000);
             }
+
+
         } else {
             toast.warn("OTP is Required");
         }
@@ -94,12 +119,22 @@ const ForgotPas = () => {
 
                 console.log(passdata);
 
-                const response = await logingandsignupmakepost("api/resetpass", passdata);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/changepassword`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    },
+                    body: JSON.stringify(passdata),
+                });
 
                 setLoading(false);
 
-                if (response) {
-                    toast.success(response?.message);
+                const res = await response.json();
+                setLoading(false);
+
+                if (res) {
+                    toast.success(res?.message);
 
                     setTimeout(() => {
                         router.push('/signin');
