@@ -2,7 +2,7 @@ import HeroSection from "./Hero";
 
 const HeroBGWrper = () => {
     return (
-        <div className="min-h-screen w-full bg-white relative">
+        <div className="h-fit md:min-h-screen w-full bg-white relative">
             {/* Teal Glow Background */}
             <div
                 className="absolute inset-0 z-0"

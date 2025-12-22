@@ -23,7 +23,7 @@ const Header = () => {
           className={`px-3 h-full w-full flex items-center justify-between ${!isDasboard && "container px-6"
             }`}
         >
-          <Link href={"/"} className="flex items-center h-full">
+          <Link href={"/"} className="flex items-center h-full w-[100px] lg:w-[130px] xl:w-[250px]">
             <Image src={logo} alt="Logo" className="w-[90px]" />
           </Link>
           <Navigation isOpen={isOpen} setisOpen={setisOpen} />

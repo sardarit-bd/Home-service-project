@@ -86,7 +86,7 @@ const Navigation = ({ isOpen, setisOpen }) => {
         } lg:flex flex-col lg:flex-row lg:items-center absolute lg:static top-[75px] left-0 bg-white border lg:border-0 w-full lg:w-auto h-screen lg:h-auto z-50`}
     >
       {/* Navigation links */}
-      <div className="flex flex-col lg:flex-row gap-4 lg:gap-7 px-4 lg:px-0 py-6 lg:py-0 w-full text-gray-600">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-5 xl:gap-7 px-4 lg:px-0 py-6 lg:py-0 w-full text-gray-600">
         {navItems.map((item, i) =>
           item.nested ? (
             <div

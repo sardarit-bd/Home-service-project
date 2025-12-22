@@ -7,7 +7,7 @@ const useSearchStore = create((set) => ({
     subservices: "",
     setsubservices: (se) => set(() => ({ subservices: se })),
 
-    area: "",
+    area: "chicago",
     setarea: (ar) => set(() => ({ area: ar })),
 
     subarea: "",

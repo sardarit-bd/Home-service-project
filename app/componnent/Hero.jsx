@@ -1,53 +1,19 @@
 "use client";
 
-import getId from "@/utilis/helper/cookie/getid";
-import getCookie from "@/utilis/helper/cookie/gettooken";
-import MakeGet from "@/utilis/requestrespose/get";
+import useSearchStore from "@/store/useSearchStore";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
 import HeroSearchBar from "./HeroSearchBar";
 
 export default function HeroSection() {
 
-
-
-    const id = getId();
-    const token = getCookie();
-    const [alldata, setalldata] = useState(null);
-    const [fetchloading, setfetchloading] = useState(false);
-
-
-    const fetching = useCallback(async (id, token) => {
-        try {
-            setfetchloading(true);
-            const response = await MakeGet(`user/${id}`, token);
-            setalldata(response?.data);
-            setfetchloading(false);
-        } catch (error) {
-            console.error("Error fetching profile:", error);
-            setfetchloading(false);
-        }
-    }, [id, token]);
-
-
-    // Simulate fetching user data
-    useEffect(() => {
-
-        fetching(id, token);
-
-    }, [id, token, fetching]);
-
-
-
-
-    console.log(alldata);
+    const { services, setservices, area, setarea, subarea, setsubarea } = useSearchStore();
 
 
 
 
     return (
-        <section className="relative flex h-[95vh] bg-whtie text-black overflow-hidden py-16 md:py-24">
+        <section className="relative h-fit lg:h-[95vh] bg-whtie text-black overflow-hidden py-16 md:py-24">
 
             <div className="container md:flex items-center justify-center  mx-auto px-2 md:px-7 text-center md:text-center">
                 <div className="">
@@ -61,7 +27,7 @@ export default function HeroSection() {
                         Find, Review & Hire the Best{" "}
                         <br />
                         <span className="text-[var(--brandColor,#00a6f4)]">Home Service Providers </span>
-                        in {!alldata ? "Chicago" : alldata?.city}
+                        in {area ? area : "Chicago"}
                     </motion.h1>
 
                     {/* Subheadline */}
@@ -72,7 +38,7 @@ export default function HeroSection() {
                         className="text-lg py-1 text-center md:text-xl text-gray-400 max-w-3xl mx-auto mb-8"
                     >
                         Compare trusted local professionals for plumbing, electrical, remodeling,
-                        cleaning, landscaping, and more — all reviewed by real Chicago homeowners.
+                        cleaning, landscaping, and more — all reviewed by real {area ? area : "Chicago"} homeowners.
                     </motion.p>
 
                     <HeroSearchBar />
