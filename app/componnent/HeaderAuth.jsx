@@ -137,16 +137,16 @@ const HeaderAuth = ({ isOpen, setisOpen }) => {
       {/* Auth Section */}
       {!token ? (
 
-        <div className="flex flex-row items-center justify-start px-6 md:justify-end gap-4">
+        <div className="flex flex-row items-center justify-start px-0 md:justify-end gap-2 pr-2">
           <Link
             href="/signin"
-            className="hidden md:block px-4 py-2 md:w-fit text-center bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all"
+            className="hidden md:block px-3 py-2 md:w-fit text-center bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all"
           >
             Join & Review
           </Link>
           <Link
             href="/signin"
-            className="px-4 py-2 md:w-fit text-center bg-sky-400 text-white font-semibold rounded-full shadow hover:bg-sky-500 transition-all hidden md:block"
+            className="px-3 py-2 md:w-fit text-center bg-sky-400 text-white font-semibold rounded-full shadow hover:bg-sky-500 transition-all hidden md:block"
           >
             Service Provider
           </Link>
