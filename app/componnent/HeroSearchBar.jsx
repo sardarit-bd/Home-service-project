@@ -112,7 +112,7 @@ const HeroSearchBar = () => {
     Categories.map(cat => PassdingAbleCategories.push(cat?.categoryName));
 
     return (
-        <div className="w-full flex justify-center items-center">
+        <div className="w-full flex justify-center items-center px-3 md:px-0">
             <motion.form
                 onSubmit={handleSearch}
                 initial={{ opacity: 0, y: 15 }}
@@ -121,7 +121,7 @@ const HeroSearchBar = () => {
                 className="flex relative z-50 items-center justify-center bg-white/90 backdrop-blur-md rounded-full p-2 pl-4 w-full max-w-3xl mx-auto shadow-sm border border-gray-100"
             >
                 {/* Search Icon */}
-                <Search className="text-gray-600" size={38} />
+                <Search className="text-gray-600 hidden md:bloclk" size={38} />
 
                 {/* Search Input with Autocomplete */}
                 <div className="relative w-full">
@@ -150,7 +150,7 @@ const HeroSearchBar = () => {
 
                 {/* Area Dropdown */}
                 <div className="flex items-center gap-1 mr-3">
-                    <select onChange={(e) => { handleAreaSelect(e) }} className="h-fit  px-2 rounded-full text-gray-600 outline-none bg-white cursor-pointer" value={area.toLowerCase()}>
+                    {/* <select onChange={(e) => { handleAreaSelect(e) }} className="h-fit  px-2 rounded-full text-gray-600 outline-none bg-white cursor-pointer" value={area.toLowerCase()}>
                         <option className="text-gray-500 font-extralight" value="">Select Metropolitan</option>
                         {Areas.map((area) => (
                             <option
@@ -161,29 +161,27 @@ const HeroSearchBar = () => {
                                 {area.areaName.toLowerCase()}
                             </option>
                         ))}
+                    </select> */}
+
+                    <select onChange={(e) => { setsubarea(e.target.value.toLocaleLowerCase()) }} value={subarea.toLowerCase()} className="h-fit w-[100px] md:w-fit px-1 md:px-2 rounded-full text-gray-600 outline-none bg-white cursor-pointer text-sm md:text-base">
+                        <option value="" className="text-gray-500 font-extralight text-sm md:text-base">Select Area</option>
+                        {filterArea?.[0]?.subareas?.map((area, index) => (
+                            <option
+                                className="capitalize text-sm md:text-base"
+                                key={index}
+                                value={area?.toLowerCase()}
+                            >
+                                {area?.toLowerCase()}
+                            </option>
+                        ))}
                     </select>
-                    {
-                        area && (
-                            <select onChange={(e) => { setsubarea(e.target.value.toLocaleLowerCase()) }} value={subarea.toLowerCase()} className="h-fit px-2 rounded-full text-gray-600 outline-none bg-white cursor-pointer">
-                                <option value="" className="text-gray-500 font-extralight">Select Area</option>
-                                {filterArea?.[0]?.subareas?.map((area, index) => (
-                                    <option
-                                        className="capitalize"
-                                        key={index}
-                                        value={area?.toLowerCase()}
-                                    >
-                                        {area?.toLowerCase()}
-                                    </option>
-                                ))}
-                            </select>
-                        )
-                    }
+
                 </div>
 
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className="bg-[var(--brandColor,#00a6f4)] text-white px-6 py-2 rounded-full font-semibold hover:opacity-90 transition-all cursor-pointer"
+                    className="bg-[var(--brandColor,#00a6f4)] text-white px-2 md:px-6 py-1 text-md md:py-2 rounded-full font-semibold hover:opacity-90 transition-all cursor-pointer"
                 >
                     Search
                 </button>

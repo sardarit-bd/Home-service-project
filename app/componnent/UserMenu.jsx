@@ -9,7 +9,7 @@ import CreditPoint from "./CreditPoint";
 const UserMenu = ({ loginUser, handleLogout }) => {
 
     return (
-        <div className="flex items-center justify-end w-fit gap-1 h-full text-gray-500 relative cursor-pointer pr-3 md:pr-6">
+        <div className="flex items-center justify-end w-fit gap-1 h-full text-gray-500 relative cursor-pointer pr-1 md:pr-3 md:pr-6">
             {/* <div className="font-semibold text-md text-right line-clamp-1">{loginUser?.name}</div> */}
             <div className="group">
                 <MdOutlineAccountCircle className="text-4xl" />

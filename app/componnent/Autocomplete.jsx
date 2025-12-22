@@ -72,7 +72,7 @@ export default function Autocomplete({ suggestions = [], onSelect, inputValue, s
         <div className="relative w-full" ref={wrapperRef}>
             <input
                 type="text"
-                className="flex-1 bg-transparent outline-none px-3 text-gray-800 placeholder:text-gray-500 w-full"
+                className="flex-1 bg-transparent outline-none px-0 md:px-3 text-gray-800 placeholder:text-gray-500 w-full"
                 placeholder="Search services..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}

@@ -1,6 +1,7 @@
 "use client";
 
 import useLogedUserStore from "@/store/useLogedUser";
+import useSearchStore from "@/store/useSearchStore";
 import getEmail from "@/utilis/helper/cookie/getemail";
 import getRole from "@/utilis/helper/cookie/getrole";
 import getCookie from "@/utilis/helper/cookie/gettooken";
@@ -23,17 +24,68 @@ const HeaderAuth = ({ isOpen, setisOpen }) => {
   const router = useRouter();
   const { loginUser, setLoginUser } = useLogedUserStore();
   const [myToken, setmyToken] = useState("")
-
-
+  const [Areas, setAreas] = useState([]);
+  const { services, setservices, area, setarea, subarea, setsubarea } = useSearchStore();
   const token = getCookie();
   const role = getRole();
   const name = getEmail();
+
+
+
+
+
+
+  /************** Fetch all areas here ******************/
+  const fetchAreas = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/allarea`
+      );
+      const data = await res.json();
+      if (data.success) setAreas(data.total || []);
+    } catch (err) {
+      console.error("Failed to load areas:", err);
+    }
+  };
+
+
+
+
+  /************** handle area selection here *******************/
+  const handleAreaSelect = (e) => {
+
+    if (e.target.value) {
+      setarea(e.target.value.toLowerCase());
+    } else {
+      setarea(e.target.value.toLowerCase());
+      setsubarea(e.target.value.toLowerCase());
+    }
+
+  };
+
+
+
+
+  //currosponsing subarea filter here
+  const filterArea = Areas?.filter((item, index) => {
+    return item?.areaName.toLowerCase() === area.toLowerCase();
+  })
+
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
 
     setMounted(true);
 
-
+    fetchAreas();
 
     setmyToken(token);
     setLoginUser({ name, token, role });
@@ -58,19 +110,37 @@ const HeaderAuth = ({ isOpen, setisOpen }) => {
   };
 
 
-  if (!mounted) return null; // 🔑 THIS FIXES HYDRATION
-
+  if (!mounted) return null; // THIS FIXES HYDRATION
 
 
   return (
     <div className="flex items-center justify-end">
+
+      {/* Area Dropdown */}
+      <div className="flex items-center gap-1 mr-1 md:mr-3 px-1 md:px-2 py-2 md:py-3 md:w-fit text-center bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all">
+        <select onChange={(e) => { handleAreaSelect(e) }} className="h-fit w-fit px-0 md:px-2 rounded-full text-gray-600 outline-none bg-white cursor-pointer text-sm md:text-base" value={area.toLowerCase()}>
+          <option className="text-gray-500 font-extralight text-sm md:text-base" value="">Select Metropolitan</option>
+          {Areas.map((area) => (
+            <option
+              className="capitalize text-sm md:text-base"
+              key={area._id}
+              value={area.areaName.toLowerCase()}
+            >
+              {area.areaName.toLowerCase()}
+            </option>
+          ))}
+        </select>
+      </div>
+
+
+
       {/* Auth Section */}
       {!token ? (
 
         <div className="flex flex-row items-center justify-start px-6 md:justify-end gap-4">
           <Link
             href="/signin"
-            className="px-4 py-2 md:w-fit text-center bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all"
+            className="hidden md:block px-4 py-2 md:w-fit text-center bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all"
           >
             Join & Review
           </Link>
@@ -85,7 +155,7 @@ const HeaderAuth = ({ isOpen, setisOpen }) => {
         <div className="flex items-center justify-end gap-3">
           <Link
             href="/services/handyman/carpentry"
-            className="px-4 py-2 md:w-fit text-center bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all"
+            className="hidden md:block px-4 py-2 md:w-fit text-center bg-white text-[var(--brandColor,#00a6f4)] font-semibold rounded-full shadow hover:bg-gray-100 transition-all"
           >
             Join & Review
           </Link>
