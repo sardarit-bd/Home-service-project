@@ -10,6 +10,8 @@ export default function HeroSection() {
     const { services, setservices, area, setarea, subarea, setsubarea } = useSearchStore();
 
 
+
+
     return (
         <section className="relative h-fit lg:h-[95vh] bg-whtie text-black overflow-hidden py-16 md:py-24">
 
